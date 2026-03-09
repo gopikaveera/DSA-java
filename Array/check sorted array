@@ -1,0 +1,15 @@
+public class Solution {
+    public static int isSorted(int n, int []a) {
+        for(int i=1;i<n;i++){
+            if(a[i]>=a[i-1]){ //1st index element greater than or equal to previous element
+
+            }
+            
+            else{
+            return 0;
+        }
+        }
+        return 1;
+    }
+}
+//Time Complexity O(n)
