@@ -1,0 +1,43 @@
+import java.util.*;
+public class Solution {
+    public static List< Integer > sortedArray(int []a, int []b) 
+    {
+        int n=a.length;           //n,m represents the length of array
+        int m=b.length;
+        List<Integer> union=new ArrayList<>();                //create a list to store union elements
+        int i=0,j=0;                 //initialize pointers to 0
+        while(i<n && j<m){  //Iterate while both array have elements
+            if(a[i]<b[j]){  // If element in 1st array is smaller
+                if(union.isEmpty() || union.get(union.size()-1) !=a[i])  //Add if empty or not duplicate
+                union.add(a[i]); //add element in union
+                i++;
+            }
+            else if(b[j]<a[i]){   //If element in 2nd array is smaller
+                if(union.isEmpty() || union.get(union.size()-1) !=b[j])  //Add if empty or not duplicate
+                union.add(b[j]);
+                j++;
+            }
+            else{       // Elements are equal, add once if not duplicate
+                if(union.isEmpty() || union.get(union.size()-1) != a[i])
+                union.add(a[i]);
+                i++;            //Move both pointers
+                j++;
+            }
+        }
+ // Append remaining elements from 1st array
+        while(i<n){
+            if(union.isEmpty() || union.get(union.size()-1) !=a[i])
+                union.add(a[i]);
+                i++;
+        }
+// // Append remaining elements from 2nd array
+        while(j<m){
+            if(union.isEmpty() || union.get(union.size()-1) !=b[j])
+                union.add(b[j]);
+                j++;
+        }
+        return union; // return final union list
+    }
+}
+//Time Complexity: O(n+m)
+//Space Complexity: O(n+m)
