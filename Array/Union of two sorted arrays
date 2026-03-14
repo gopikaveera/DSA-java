@@ -8,7 +8,7 @@ public class Solution {
         int i=0,j=0;                 //initialize pointers to 0
         while(i<n && j<m){  //Iterate while both array have elements
             if(a[i]<b[j]){  // If element in 1st array is smaller
-                if(union.isEmpty() || union.get(union.size()-1) !=a[i])  //Add if empty or not duplicate
+                if(union.isEmpty() || union.get(union.size()-1) !=a[i])  // Add the element only if it is different from the last element already stored in the union.
                 union.add(a[i]); //add element in union
                 i++;
             }
