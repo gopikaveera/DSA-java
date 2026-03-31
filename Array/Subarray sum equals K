@@ -1,0 +1,27 @@
+Given an array of integers nums and an integer k, return the total number of subarrays whose sum equals to k.
+
+
+class Solution {
+    public int subarraySum(int[] nums, int k) {
+    HashMap<Integer,Integer> map=new HashMap<>();   // initializing hashmap   (name=map)  // map - stores prefixsum → frequency(count)
+          int prefixsum=0;             // running sum from index 0 to i
+          int count=0;                 // final answer (number of subarrays)
+          map.put(0,1);                // base case → handles subarray starting from index 0
+            for(int i=0;i<nums.length;i++){
+                prefixsum+=nums[i];   // step 1: update running sum
+                                      // step 2:to find out how many times k is there ,i need to findout how many times x-k is there   (the no.of times k would've occurred,the same no.of times x-k would've occurred)
+                int target=prefixsum-k;      //(x-k)=target ->(how many times i previously saw this target sum)
+                if(map.containsKey(target)){
+                    count+=map.get(target);  // step 3: add number of valid subarrays
+                    }
+
+                    map.put(prefixsum,map.getOrDefault(prefixsum,0)+1); //step 4: Take prefixsum as key,
+                                                                                  get its currentvalue(or 0 if not present)
+                                                                                  add 1,
+                                                                                  and store it back in the map.
+
+}                                                                                 
+
+     return count;         // return total subarrays
+}
+}
