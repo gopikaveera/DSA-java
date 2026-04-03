@@ -1,0 +1,38 @@
+Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+
+Input: nums = [2,7,11,15], target = 9
+Output: [0,1]
+Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
+
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        
+        // Create a HashMap to store number → index
+        // Key = number from array
+        // Value = index of that number
+        HashMap<Integer,Integer> map = new HashMap<>();
+
+        // Loop through the array
+        for(int i = 0; i < nums.length; i++) {
+
+            // Find the number we need to complete the target
+            // Example: target = 9, nums[i] = 2 → need 7
+            int solution = target - nums[i];
+
+            // Check if that required number already exists in the map
+            if(map.containsKey(solution)) {
+
+                // If yes, return the indices:
+                // map.get(solution) → index of the required number
+                // i → current index
+                return new int[]{map.get(solution), i};
+            }
+
+            // If not found, store current number and its index in map
+            map.put(nums[i], i);
+        }
+
+        // If no pair is found, return [-1, -1]
+        return new int[] {-1, -1};
+    }
+}
