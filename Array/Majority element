@@ -1,0 +1,58 @@
+Majority Element:
+Given an array nums of size n, return the majority element.
+The majority element is the element that appears more than ⌊n / 2⌋ times.
+
+
+import java.util.*; 
+class Solution {
+
+    // Function to find majority element
+    public int majorityElement(int[] nums) {
+
+        int n = nums.length;   // Size of array
+
+        int cnt = 0;           // Count (support for candidate)
+        int el = 0;            // Candidate element
+
+        // Step 1: Find potential candidate
+        for (int i = 0; i < n; i++) {
+
+            // If no candidate, pick current element
+            if (cnt == 0) {
+                el = nums[i];   // Set new candidate
+                cnt = 1;        // Give it one vote
+            }
+
+            // If same as candidate → increase count
+            else if (nums[i] == el) {
+                cnt++;
+            }
+
+            // If different → decrease count (cancel out)
+            else {
+                cnt--;
+            }
+        }
+
+        // Step 2: Verify candidate
+        int cnt1 = 0;
+
+        for (int i = 0; i < n; i++) {
+
+            // Count how many times candidate appears
+            if (nums[i] == el) {
+                cnt1++;
+            }
+        }
+
+        // If it appears more than n/2 times → majority
+        if (cnt1 > n / 2) {
+            return el;
+        }
+
+        // Otherwise no majority element
+        return -1;
+    }
+}
+//TC:O(N)
+//SC:O(1)
