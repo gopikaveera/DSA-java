@@ -1,0 +1,36 @@
+You are given an array prices where prices[i] is the price of a given stock on the ith day.
+You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
+Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.
+
+ class Solution {
+    public int maxProfit(int[] prices) {
+
+        // Store the minimum price seen so far (best day to buy)
+        int minprice = Integer.MAX_VALUE;
+
+        // Store the maximum profit we can get
+        int maxprofit = 0;
+
+        // Loop through each day's price
+        for (int i = 0; i < prices.length; i++) {
+
+            // If current price is lower than previous minimum
+            // → update minprice (better day to buy)
+            if (prices[i] < minprice) {
+                minprice = prices[i];
+            }
+
+            // Otherwise, try selling on this day
+            else {
+                // Calculate profit = selling price - buying price
+                // Update maxprofit if this profit is greater
+                maxprofit = Math.max(maxprofit, prices[i] - minprice);
+            }
+        }
+
+        // Return the maximum profit found
+        return maxprofit;
+    }
+}
+//TC:O(N)
+//SC:O(1)
