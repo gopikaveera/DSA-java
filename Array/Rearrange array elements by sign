@@ -1,0 +1,122 @@
+Brute:
+class Solution {
+    public int[] rearrangeArray(int[] nums) {
+        List<Integer> pos=new ArrayList<>();
+        List<Integer> neg=new ArrayList<>();
+        for(int i=0;i<nums.length;i++){
+            if(nums[i]>0){
+                pos.add(nums[i]);
+            else
+                neg.add(nums[i]);
+            }
+        }
+            for(int i=0;i<nums.length/2;i++){
+                nums[2*i]=pos.get(i);
+                nums[2*i+1]=neg.get(i);
+            
+        }
+        return nums;
+        
+    }
+}
+//TC:O(N)+O(N/2)
+//SC:O(N)
+
+OPTIMAL:
+class Solution {
+    public int[] rearrangeArray(int[] nums) {
+
+        int n = nums.length; // size of array
+
+        int[] ans = new int[n]; // new array to store result
+
+        int posindex = 0; // even index → for positive numbers
+        int negindex = 1; // odd index → for negative numbers
+
+        // Traverse the input array
+        for (int i = 0; i < n; i++) {
+
+            // If current number is positive
+            if (nums[i] > 0) {
+
+                // Place it at even index
+                ans[posindex] = nums[i];
+
+                // Move to next even index
+                posindex += 2;
+            }
+
+            // If current number is negative
+            else {
+
+                // Place it at odd index
+                ans[negindex] = nums[i];
+
+                // Move to next odd index
+                negindex += 2;
+            }
+        }
+
+        // Return rearranged array
+        return ans;
+    }
+}
+//TC:O(N)
+//SC:O(N)
+_________________________________________________________________________________________-
+other variety where(pos!=neg)
+
+import java.util.*;
+class Solution {
+    public int[] rearrangeArray(int[] nums) {
+
+        int n = nums.length;
+
+        // Step 1: store positives and negatives separately
+        List<Integer> pos = new ArrayList<>();
+        List<Integer> neg = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            if (nums[i] > 0) {
+                pos.add(nums[i]);
+            } else {
+                neg.add(nums[i]);
+            }
+        }
+
+        // Step 2: create result array
+        int[] arr = new int[n];
+
+        int i = 0; // index for result array
+        int p = 0; // index for pos list
+        int ne = 0; // index for neg list
+
+        // Step 3: alternate elements
+        while (p < pos.size() && ne < neg.size()) {
+
+            arr[i] = pos.get(p); // place positive
+            i++;
+            p++;
+
+            arr[i] = neg.get(ne); // place negative
+            i++;
+            ne++;
+        }
+
+        // Step 4: add remaining positives
+        while (p < pos.size()) {
+            arr[i] = pos.get(p);
+            i++;
+            p++;
+        }
+
+        // Step 5: add remaining negatives
+        while (ne < neg.size()) {
+            arr[i] = neg.get(ne);
+            i++;
+            ne++;
+        }
+
+        return arr;
+    }
+}
