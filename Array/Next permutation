@@ -1,0 +1,57 @@
+class Solution {
+    public void nextPermutation(int[] nums) {
+
+        int index = -1; // will store breakpoint index
+
+        // Step 1: find the first decreasing element from right
+        for (int i = nums.length - 2; i >= 0; i--) {
+
+            // if current element is smaller than next
+            if (nums[i] < nums[i + 1]) {
+                index = i; // store breakpoint
+                break;
+            }
+        }
+
+        // Step 2: if no breakpoint → array is in descending order
+        if (index == -1) {
+            reverse(nums, 0, nums.length - 1); // return smallest permutation
+            return;
+        }
+
+        // Step 3: find element just greater than nums[index]
+        for (int i = nums.length - 1; i > index; i--) {
+
+            // find the next greater element from right
+            if (nums[i] > nums[index]) {
+                swap(nums, i, index); // swap them
+                break;
+            }
+        }
+
+        // Step 4: reverse the remaining right part
+        // to make it smallest possible
+        reverse(nums, index + 1, nums.length - 1);
+    }
+
+    // Helper: reverse part of array
+    private void reverse(int[] arr, int start, int end) {
+
+        // swap elements from both ends
+        while (start < end) {
+            swap(arr, start, end);
+            start++;
+            end--;
+        }
+    }
+
+    // Helper: swap two elements
+    private void swap(int[] arr, int i, int j) {
+
+        int temp = arr[i]; // store one value
+        arr[i] = arr[j];   // replace first with second
+        arr[j] = temp;     // put stored value in second
+    }
+}
+//TC:O(N)
+//SC:O(1)
