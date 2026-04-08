@@ -1,0 +1,46 @@
+1. Start from the rightmost element
+2. Keep a variable max = last element
+3. Add last element to answer
+4. Move left:
+   → If current element > max:
+        - It is a leader
+        - Add to answer
+        - Update max
+5. Reverse the answer (because we added from right to left)
+
+
+
+import java.util.*;
+
+class Solution {
+    // Function to find the leaders in an array.
+    public ArrayList<Integer> leaders(int[] nums) {
+        ArrayList<Integer> ans = new ArrayList<>();
+        
+        if (nums.length == 0) {
+            return ans;
+        }
+        
+        // Last element of the array is always a leader
+        int max = nums[nums.length - 1];
+        ans.add(nums[nums.length - 1]);
+        
+        // Check elements from right to left
+        for (int i = nums.length - 2; i >= 0; i--) {
+            if (nums[i] > max) {
+                ans.add(nums[i]);
+                max = nums[i];
+            }
+        }
+        
+        /* Reverse the list to match
+        the required output order */
+        Collections.reverse(ans);
+        
+        // Return the leaders
+        return ans;
+    }
+}
+
+//TC:O(N)
+//SC:O(1)
