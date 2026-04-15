@@ -4,11 +4,11 @@ class Solution {
         int left = 0, right = s.length() - 1;
         // LOOP → process until pointers meet
         while (left < right) {
-            // skip non-alphanumeric (keep moving until valid)
+            // SKIP non-alphanumeric (keep moving until valid)
             while (left < right && !Character.isLetterOrDigit(s.charAt(left))) {
                 left++;
             }
-            // skip non-alphanumeric
+            // SKIP non-alphanumeric
             while (left < right && !Character.isLetterOrDigit(s.charAt(right))) {
                 right--;
             }
