@@ -1,0 +1,26 @@
+
+You are given a string num, representing a large integer. Return the largest-valued odd integer (as a string) that is a non-empty substring of num, or an empty string "" if no odd integer exists.
+
+class Solution {
+    public String largestOddNumber(String num) {
+
+        // Traverse from right to left
+        // because we want the largest-valued substring
+        for (int i = num.length() - 1; i >= 0; i--) {
+
+            // Convert character to digit and check if it is odd
+            // (last digit determines if number is odd)
+            if ((num.charAt(i) - '0') % 2 == 1) {                   //or % 2 !=0
+
+                // substring(0, i+1) → take prefix from index 0 to i (inclusive)
+                // i+1 because end index is exclusive in Java
+                return num.substring(0, i + 1);
+            }
+        }
+
+        // If no odd digit found, return empty string
+        return "";
+    }
+}
+//TC:O(n)
+//SC:O(1)
