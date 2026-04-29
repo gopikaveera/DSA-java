@@ -1,0 +1,25 @@
+import java.util.Arrays; // import Arrays class for sorting
+
+public class LCP { // define class
+
+    public static String longestCommonPrefix(String[] strs) { // method to find LCP
+
+        if (strs == null || strs.length == 0) return ""; // check empty or null input
+
+        Arrays.sort(strs); // sort the array lexicographically
+
+        String first = strs[0]; // take first (smallest) string after sorting
+        String last = strs[strs.length - 1]; // take last (largest) string
+
+        int i = 0; // pointer to track matching characters
+
+        while (i < first.length() && i < last.length()) {   //Continue only if index i is valid for BOTH strings
+            if (first.charAt(i) != last.charAt(i)) break; // stop if mismatch found
+            i++; // move to next character if match
+        }
+
+        return first.substring(0, i); // return common prefix from 0 to i
+    }
+
+Time → O(N log N + M)
+Space → O(1)
