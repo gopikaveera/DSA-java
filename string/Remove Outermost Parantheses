@@ -1,0 +1,47 @@
+class Solution {
+    public String removeOuterParentheses(String s) {
+
+        StringBuilder result = new StringBuilder();  
+        // stores final answer
+
+        int level = 0;  
+        // number of open brackets
+
+        for (int i = 0; i < s.length(); i++) {  
+            // go through each character
+
+            char ch = s.charAt(i);  
+            // current character
+
+            if (ch == '(') {  
+                // if opening bracket
+
+                if (level > 0) {  
+                    // if not outer bracket
+                    result.append(ch);  
+                    // add to result
+                }
+
+                level++;  
+                // increase level (going inside)
+            } 
+            else {  
+                // if closing bracket
+
+                level--;  
+                // decrease level (closing one bracket)
+
+                if (level > 0) {  
+                    // if still inside (not outer)
+                    result.append(ch);  
+                    // add to result
+                }
+            }
+        }
+
+        return result.toString();  
+        // convert to string and return
+    }
+}
+TC:O(n)
+SC:O(n)
