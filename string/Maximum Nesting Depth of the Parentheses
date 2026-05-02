@@ -1,0 +1,33 @@
+class Solution {
+    public int maxDepth(String s) {
+        
+        int depth = 0;       // current nesting level
+        int maxDepth = 0;    // maximum depth found
+        
+        // traverse each character in string
+        for(int i = 0; i < s.length(); i++){
+            
+            char ch = s.charAt(i);  // get current character
+            
+            // if opening bracket → go deeper
+            if(ch == '('){
+                depth++;  // increase depth
+                
+                // update max if needed
+                maxDepth = Math.max(maxDepth, depth);
+            }
+            
+            // if closing bracket → come up
+            else if(ch == ')'){
+                depth--;  // decrease depth
+            }
+        }
+        
+        // return maximum depth found
+        return maxDepth;
+    }
+}
+Time Complexity: O(n)
+(we scan string once)
+Space Complexity: O(1)
+(no extra memory used)
