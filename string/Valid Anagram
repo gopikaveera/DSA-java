@@ -1,0 +1,25 @@
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        // Step 1: Length check
+        if (s.length() != t.length()) return false;
+
+        // Step 2: Frequency array (ASCII)
+        int[] freq = new int[128];
+
+        // Step 3: Update counts
+        for (int i = 0; i < s.length(); i++) {
+            freq[s.charAt(i)]++;   // add for s
+            freq[t.charAt(i)]--;   // subtract for t
+        }
+
+        // Step 4: Verify all zero
+        for (int i = 0; i < freq.length; i++) {
+            if (freq[i] != 0) return false;
+        }
+
+        // Step 5: Valid anagram
+        return true;
+    }
+}
+Time Complexity: O(n)
+Space Complexity: O(1), since we use a constant-size frequency array
