@@ -1,0 +1,88 @@
+class Solution {
+    public String frequencySort(String s) {
+
+        // Step 1: Create map to store character → frequency
+        HashMap<Character, Integer> map = new HashMap<>();
+
+
+        // Step 2: Count frequency of each character
+        for (int i = 0; i < s.length(); i++) {
+
+            // Get character at index i
+            char ch = s.charAt(i);
+
+            // If character already exists → increase count
+            if (map.containsKey(ch)) {
+                map.put(ch, map.get(ch) + 1);
+            } 
+            else {
+                // If new character → store with count 1
+                map.put(ch, 1);
+            }
+        }
+
+        // Example after this:
+        // "tree" → {t=1, r=1, e=2}
+
+
+        // Step 3: Create bucket array
+        // Index = frequency
+        // Value = list of characters having that frequency
+        ArrayList<Character>[] bucket = new ArrayList[s.length() + 1];
+
+        // Why s.length() + 1?
+        // Maximum frequency can be equal to string length
+
+
+        // Step 4: Fill the buckets
+        for (char ch : map.keySet()) {
+
+            // Get frequency of character
+            int freq = map.get(ch);
+
+            // If no list exists at this frequency → create one
+            if (bucket[freq] == null) {
+                bucket[freq] = new ArrayList<>();
+            }
+
+            // Add character into correct bucket
+            bucket[freq].add(ch);
+        }
+
+        // Example bucket:
+        // bucket[1] → [t, r]
+        // bucket[2] → [e]
+
+
+        // Step 5: Create result string
+        StringBuilder result = new StringBuilder();
+
+
+        // Step 6: Traverse bucket from high frequency → low
+        for (int i = bucket.length - 1; i >= 0; i--) {
+
+            // Skip if no characters in this bucket
+            if (bucket[i] == null) continue;
+
+            // Loop through characters in this bucket
+            for (int j = 0; j < bucket[i].size(); j++) {
+
+                // Get character
+                char ch = bucket[i].get(j);
+
+                // Repeat character i times (because index = frequency)
+                for (int k = 0; k < i; k++) {
+
+                    // Add character to result
+                    result.append(ch);
+                }
+            }
+        }
+
+
+        // Step 7: Return final string
+        return result.toString();
+    }
+}
+TC:O(n)
+SC:O(n)
