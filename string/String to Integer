@@ -1,0 +1,221 @@
+class Solution {
+
+    public int myAtoi(String s) {
+
+        // i -> used to traverse the string
+        int i = 0;
+
+        // n -> stores length of string
+        int n = s.length();
+
+        // =====================================
+        // STEP 1 : SKIP LEADING SPACES
+        // =====================================
+
+        /*
+           Example:
+           "    42"
+
+           Skip all spaces until digit/sign comes
+        */
+
+        while (i < n && s.charAt(i) == ' ') {
+            i++;
+        }
+
+        // =====================================
+        // STEP 2 : HANDLE SIGN
+        // =====================================
+
+        /*
+           Default sign is positive
+        */
+
+        int sign = 1;
+
+        /*
+           Check whether current character is:
+           '+' or '-'
+        */
+
+        if (i < n && (s.charAt(i) == '+' || s.charAt(i) == '-')) {
+
+            // If negative sign comes
+            if (s.charAt(i) == '-') {
+
+                sign = -1;
+            }
+
+            // Move to next character
+            i++;
+        }
+
+        // =====================================
+        // STEP 3 : CONVERT STRING TO INTEGER
+        // =====================================
+
+        /*
+           result stores final number
+        */
+
+        int result = 0;
+
+        /*
+           Continue loop while character is digit
+        */
+
+        while (i < n && Character.isDigit(s.charAt(i))) {
+
+            // Convert character digit into integer
+
+            /*
+               Example:
+               '7' - '0' = 7
+            */
+
+            int digit = s.charAt(i) - '0';
+
+            // =====================================
+            // STEP 4 : CHECK INTEGER OVERFLOW
+            // =====================================
+
+            /*
+               Before doing:
+
+               result = result * 10 + digit
+
+               check whether overflow occurs
+            */
+
+            if (result > (Integer.MAX_VALUE - digit) / 10) {
+
+                /*
+                   If sign is positive:
+                   return Integer.MAX_VALUE
+
+                   If sign is negative:
+                   return Integer.MIN_VALUE
+                */
+
+                return (sign == 1)
+                        ? Integer.MAX_VALUE
+                        : Integer.MIN_VALUE;
+            }
+
+            // =====================================
+            // STEP 5 : BUILD THE NUMBER
+            // =====================================
+
+            /*
+               Example:
+
+               result = 12
+               digit = 3
+
+               12 * 10 + 3 = 123
+            */
+
+            result = result * 10 + digit;
+
+            // Move to next character
+            i++;
+        }
+
+        // =====================================
+        // STEP 6 : RETURN FINAL ANSWER
+        // =====================================
+
+        return result * sign;
+    }
+}
+
+
+/*
+
+=============================
+EXAMPLE 1
+=============================
+
+Input:
+"42"
+
+Output:
+42
+
+
+=============================
+EXAMPLE 2
+=============================
+
+Input:
+"   -42abc"
+
+Process:
+
+Skip spaces
+Sign = -1
+Digits = 42
+Stop at 'a'
+
+Output:
+-42
+
+
+=============================
+EXAMPLE 3
+=============================
+
+Input:
+"4193 with words"
+
+Output:
+4193
+
+
+=============================
+EXAMPLE 4 (OVERFLOW)
+=============================
+
+Input:
+"9999999999999"
+
+Output:
+2147483647
+
+
+=============================
+TIME COMPLEXITY
+=============================
+
+O(n)
+
+- Traverse string once
+
+
+=============================
+SPACE COMPLEXITY
+=============================
+
+O(1)
+
+- Uses only variables
+- No extra data structures
+
+
+=============================
+IMPORTANT FUNCTIONS USED
+=============================
+
+1) Character.isDigit(ch)
+
+Checks whether character is digit
+
+Example:
+Character.isDigit('5') -> true
+Character.isDigit('a') -> false
+
+2) Integer.MAX_VALUE
+2147483647
+
+3) Integer.MIN_VALUE
+-2147483648
