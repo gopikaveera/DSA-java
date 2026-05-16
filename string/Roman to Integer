@@ -1,0 +1,85 @@
+import java.util.HashMap;
+class Solution {
+    public int romanToInt(String s) {
+
+        // Create HashMap to store Roman symbols and values
+        HashMap<Character, Integer> map = new HashMap<>();
+
+        // Store Roman numeral values
+        map.put('I', 1);      // I = 1
+        map.put('V', 5);      // V = 5
+        map.put('X', 10);     // X = 10
+        map.put('L', 50);     // L = 50
+        map.put('C', 100);    // C = 100
+        map.put('D', 500);    // D = 500
+        map.put('M', 1000);   // M = 1000
+
+        // Variable to store final answer
+        int k = 0;
+
+        // Traverse the string
+        for (int i = 0; i < s.length(); i++) {
+
+            // Get current character
+            char ch = s.charAt(i);
+
+            /*
+             Check subtraction case:
+
+             i+1 < s.length()
+             -> checks whether next character exists
+
+             map.get(s.charAt(i+1)) > map.get(ch)
+             -> checks whether next value is greater
+
+             Example:
+             IV -> 5 > 1
+             IX -> 10 > 1
+            */
+
+            if (i + 1 < s.length() &&
+                map.get(s.charAt(i + 1)) > map.get(ch)) {
+
+                // Add subtraction value
+                k += map.get(s.charAt(i + 1)) - map.get(ch);
+
+                // Skip next character because already processed
+                i++;
+            }
+
+            else {
+
+                // Normal addition case
+                k += map.get(ch);
+            }
+        }
+
+        // Return final integer value
+        return k;
+    }
+}
+
+/*
+
+TIME COMPLEXITY:
+O(n)
+- Loop runs once through the string
+
+SPACE COMPLEXITY:
+O(1)
+- HashMap contains only fixed 7 values
+
+EXAMPLE:
+
+Input:
+s = "MCMIV"
+
+Process:
+M    -> 1000
+CM   -> 900
+IV   -> 4
+
+Output:
+1904
+
+*/
