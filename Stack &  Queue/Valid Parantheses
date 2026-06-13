@@ -28,8 +28,11 @@ class Solution {
                 // Remove top element
                 st.pop();
 
-                // Check for mismatch
-                if((s.charAt(i) == ')' && ch != '(') ||
+                // Check for mismatch                               // otherway to write
+                if((s.charAt(i) == ')' && ch != '(') ||          // if((s.charAt(i)==')' && ch=='(' ) || (s.charAt(i)=='}' && ch=='{') || (s.charAt(i)==']' && ch=='[') ) continue;
+                                                                     else{
+                                                                          return false;
+                                                                         }
                    (s.charAt(i) == '}' && ch != '{') ||
                    (s.charAt(i) == ']' && ch != '[')) {
 
