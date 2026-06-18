@@ -1,0 +1,48 @@
+class Solution {
+    public int[] nextGreaterElements(int[] nums) {
+
+        // Monotonic decreasing stack
+        Stack<Integer> st = new Stack<>();
+
+        // Size of array
+        int n = nums.length;
+
+        // Stores final answers
+        int[] ans = new int[n];
+
+        // Traverse twice from right to left
+        // (simulate circular array)
+        for(int i = 2*n - 1; i >= 0; i--) {
+
+            // Convert virtual index into actual index
+            int ind = i % n;
+
+            // Remove all smaller/equal elements
+            // because they can never be NGE
+            while(!st.isEmpty() && st.peek() <= nums[ind]) {
+                st.pop();
+            }
+
+            // Only fill answers during second pass
+            // (i = n-1 to 0)
+            if(i < n) {
+
+                // No greater element exists
+                if(st.isEmpty()) {
+                    ans[ind] = -1;
+                }
+
+                // Top of stack is next greater element
+                else {
+                    ans[ind] = st.peek();
+                }
+            }
+
+            // Add current element for future elements
+            st.push(nums[ind]);
+        }
+
+        // Return final NGE array
+        return ans;
+    }
+}
