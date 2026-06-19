@@ -1,0 +1,34 @@
+class Solution {
+
+    public int trap(int[] height) { // Function to find total trapped rainwater
+
+        int n = height.length; // Store array size
+
+        int left = 0, right = n - 1; // Two pointers: start and end of array
+
+        int totalWater = 0; // Stores final trapped water
+
+        int leftMax = height[left], rightMax = height[right]; // Highest bars seen from left and right
+
+        while (left < right) { // Continue until pointers meet
+
+            if (leftMax < rightMax) { // Left side is the limiting boundary
+                left++; // Move left pointer forward
+                leftMax = Math.max(leftMax, height[left]); // Update maximum height seen on left
+                totalWater += leftMax - height[left]; // Water trapped at current left position
+
+            } else { // Right side is the limiting boundary
+                right--; // Move right pointer backward
+                rightMax = Math.max(rightMax, height[right]); // Update maximum height seen on right
+                totalWater += rightMax - height[right]; // Water trapped at current right position
+            }
+        }
+
+        return totalWater; // Return total trapped rainwater
+    }
+}
+Time Complexity  : O(n)   // Each pointer moves at most n times
+Space Complexity : O(1)   // Only variables are used
+
+If leftMax < rightMax, process left side because water depends on leftMax.
+Otherwise, process right side because water depends on rightMax.
