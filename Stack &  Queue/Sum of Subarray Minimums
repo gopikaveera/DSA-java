@@ -1,0 +1,641 @@
+class Solution {
+
+    // Returns the index of the Next Smaller Element (NSE) for every element
+    private int[] findNSE(int[] arr) {
+
+        int n = arr.length;                    // Store array size
+
+        int[] ans = new int[n];                // ans[i] stores the index of NSE
+
+        Stack<Integer> st = new Stack<>();     // Monotonic increasing stack (stores INDICES)
+
+        // Traverse from right to left because we need the next smaller element
+        for (int i = n - 1; i >= 0; i--) {
+
+            // Remove all elements greater than or equal to current element
+            // They can never become the next smaller element
+            while (!st.isEmpty() && arr[st.peek()] >= arr[i]) {
+                st.pop();
+            }
+
+            // If stack is not empty, top is NSE index
+            // Otherwise, no smaller element exists, so store n
+            ans[i] = !st.isEmpty() ? st.peek() : n;
+
+            // Push current INDEX into stack
+            st.push(i);
+        }
+
+        // Return the NSE index array
+        return ans;
+    }
+
+    // Returns the index of the Previous Smaller or Equal Element (PSEE)
+    private int[] findPSEE(int[] arr) {
+
+        int n = arr.length;                    // Store array size
+
+        int[] ans = new int[n];                // ans[i] stores PSEE index
+
+        Stack<Integer> st = new Stack<>();     // Monotonic increasing stack (stores INDICES)
+
+        // Traverse from left to right because we need previous smaller element
+        for (int i = 0; i < n; i++) {
+
+            // Remove only greater elements
+            // Keep equal elements to avoid duplicate counting
+            while (!st.isEmpty() && arr[st.peek()] > arr[i]) {
+                st.pop();
+            }
+
+            // If stack is not empty, top is PSEE index
+            // Otherwise store -1 (imaginary index before array starts)
+            ans[i] = !st.isEmpty() ? st.peek() : -1;
+
+            // Push current INDEX
+            st.push(i);
+        }
+
+        // Return the PSEE index array
+        return ans;
+    }
+
+    public int sumSubarrayMins(int[] arr) {
+
+        int n = arr.length;                    // Array size
+
+        int[] nse = findNSE(arr);              // Store NSE indices
+
+        int[] psee = findPSEE(arr);            // Store PSEE indices
+
+        int mod = (int)1e9 + 7;                // Required modulo
+
+        int total = 0;                         // Stores final answer
+
+        // Calculate contribution of every element
+        for (int i = 0; i < n; i++) {
+
+            // Number of possible starting positions
+            int left = i - psee[i];
+
+            // Number of possible ending positions
+            int right = nse[i] - i;
+
+            // Total subarrays where arr[i] is the minimum
+            long freq = left * right * 1L;
+
+            // Contribution of current element
+            long val = (freq * arr[i]) % mod;
+
+            // Add contribution to answer
+            total = (int)((total + val) % mod);
+        }
+
+        // Return final answer
+        return total;
+    }
+}
+
+
+===========================
+SUM OF SUBARRAY MINIMUMS
+(LeetCode 907) - REVISION NOTES
+===========================
+
+---------------------------------------------------
+CORE IDEA
+---------------------------------------------------
+
+Instead of finding the minimum for every subarray,
+
+Find:
+
+"For each element, in how many subarrays is it the minimum?"
+
+Contribution of every element:
+
+Contribution = Frequency × Element
+
+Final Answer = Sum of all Contributions
+
+---------------------------------------------------
+FORMULAS
+---------------------------------------------------
+
+left = i - PSEE
+→ Number of possible starting positions.
+
+right = NSE - i
+→ Number of possible ending positions.
+
+frequency = left × right
+→ Number of subarrays where arr[i] is the minimum.
+
+contribution = frequency × arr[i]
+
+answer = (answer + contribution) % mod
+
+---------------------------------------------------
+WHY LEFT × RIGHT ?
+---------------------------------------------------
+
+Every valid starting index can combine with every valid ending index.
+
+Example
+
+Starts : 2 choices
+
+Ends : 3 choices
+
+Possible subarrays
+
+2 × 3 = 6
+
+Hence,
+
+frequency = left × right
+
+---------------------------------------------------
+PSEE (Previous Smaller or Equal Element)
+---------------------------------------------------
+
+Traverse Left → Right
+
+while(arr[stackTop] > arr[i])
+
+Store:
+
+Previous Smaller OR Equal Index
+
+If not found
+
+Store
+
+-1
+
+Reason:
+
+Imaginary index before the array.
+
+Formula:
+
+left = i - (-1)
+
+---------------------------------------------------
+NSE (Next Smaller Element)
+---------------------------------------------------
+
+Traverse Right → Left
+
+while(arr[stackTop] >= arr[i])
+
+Store:
+
+Next Smaller Index
+
+If not found
+
+Store
+
+n
+
+Reason:
+
+Imaginary index after the array.
+
+Formula:
+
+right = n - i
+
+---------------------------------------------------
+WHY >= IN NSE ?
+---------------------------------------------------
+
+Pop greater or equal elements.
+
+This keeps only the next STRICTLY smaller element.
+
+---------------------------------------------------
+WHY > IN PSEE ?
+---------------------------------------------------
+
+Pop only greater elements.
+
+Equal elements remain.
+
+Reason:
+
+Avoid duplicate counting.
+
+---------------------------------------------------
+WHY STORE INDICES IN STACK?
+---------------------------------------------------
+
+Stack stores:
+
+INDEX
+
+NOT VALUE
+
+Because later we need
+
+left = i - psee[i]
+
+right = nse[i] - i
+
+These require positions (indices), not values.
+
+---------------------------------------------------
+STACK OPERATIONS
+---------------------------------------------------
+
+st.push(i)
+→ Push INDEX
+
+st.peek()
+→ Returns INDEX
+
+arr[st.peek()]
+→ Gives VALUE at that index
+
+st.pop()
+→ Removes INDEX
+
+---------------------------------------------------
+WHY arr[st.peek()] ?
+---------------------------------------------------
+
+Stack contains indices.
+
+Need value?
+
+Use
+
+arr[index]
+
+Example
+
+Stack
+
+[0,2]
+
+peek()
+
+returns
+
+2
+
+arr[2]
+
+returns
+
+actual value
+
+---------------------------------------------------
+WHY 1L ?
+---------------------------------------------------
+
+left × right
+
+is
+
+int × int
+
+which may overflow.
+
+Using
+
+1L
+
+converts multiplication into
+
+long × long
+
+Safe multiplication.
+
+Example
+
+left * right * 1L
+
+---------------------------------------------------
+WHY long freq ?
+---------------------------------------------------
+
+left × right
+
+can exceed Integer.MAX_VALUE.
+
+Hence
+
+long freq
+
+---------------------------------------------------
+WHY long val ?
+---------------------------------------------------
+
+freq is already long.
+
+long × int
+
+=
+
+long
+
+Hence
+
+long val
+
+---------------------------------------------------
+WHY CONVERT BACK TO int ?
+---------------------------------------------------
+
+After
+
+% mod
+
+result is always less than
+
+1,000,000,007
+
+which safely fits inside int.
+
+Hence
+
+return (int) total
+
+or
+
+total = (int)((total + val)%mod)
+
+---------------------------------------------------
+WHY TWO % MOD ?
+---------------------------------------------------
+
+First
+
+val = contribution % mod
+
+Keeps each contribution small.
+
+Second
+
+answer = (answer + val) % mod
+
+Keeps final answer small.
+
+Property
+
+(a+b)%m
+
+=
+
+((a%m)+(b%m))%m
+
+---------------------------------------------------
+WHY return ans ?
+---------------------------------------------------
+
+findNSE()
+
+creates
+
+ans[]
+
+↓
+
+return ans
+
+↓
+
+int[] nse = findNSE(arr);
+
+Now
+
+nse
+
+points to the same returned array.
+
+Same for
+
+PSEE.
+
+---------------------------------------------------
+ALGORITHM
+---------------------------------------------------
+
+Step 1
+
+Find NSE index array.
+
+Step 2
+
+Find PSEE index array.
+
+Step 3
+
+For every element
+
+left = i - psee[i]
+
+right = nse[i] - i
+
+frequency = left × right
+
+contribution = frequency × arr[i]
+
+answer += contribution
+
+---------------------------------------------------
+TIME COMPLEXITY
+---------------------------------------------------
+
+findNSE()
+
+O(n)
+
+findPSEE()
+
+O(n)
+
+Contribution Loop
+
+O(n)
+
+Overall
+
+O(n)
+
+---------------------------------------------------
+SPACE COMPLEXITY
+---------------------------------------------------
+
+NSE Array
+
+O(n)
+
+PSEE Array
+
+O(n)
+
+Stack
+
+O(n)
+
+Overall
+
+O(n)
+
+---------------------------------------------------
+COMMON MISTAKES
+---------------------------------------------------
+
+❌ Returning int instead of int[]
+
+Wrong
+
+private int findNSE()
+
+Correct
+
+private int[] findNSE()
+
+--------------------------------
+
+❌ Redeclaring total
+
+Wrong
+
+int total = ...
+
+inside loop
+
+Correct
+
+total = ...
+
+--------------------------------
+
+❌ Forgetting 1L
+
+Wrong
+
+left * right
+
+Correct
+
+left * right * 1L
+
+--------------------------------
+
+❌ Comparing index instead of value
+
+Wrong
+
+st.peek() >= arr[i]
+
+Correct
+
+arr[st.peek()] >= arr[i]
+
+--------------------------------
+
+❌ Thinking stack stores values
+
+Remember
+
+Stack stores INDICES.
+
+Need value?
+
+Use
+
+arr[st.peek()]
+
+--------------------------------
+
+❌ Using -1 for NSE
+
+Wrong
+
+No next smaller
+
+↓
+
+-1
+
+Correct
+
+n
+
+--------------------------------
+
+❌ Using n for PSEE
+
+Wrong
+
+No previous smaller
+
+↓
+
+n
+
+Correct
+
+-1
+
+---------------------------------------------------
+INTERVIEW MEMORY TRICK
+---------------------------------------------------
+
+Find
+
+PSEE
+NSE
+
+↓
+
+left = i - PSEE
+
+↓
+
+right = NSE - i
+
+↓
+
+frequency = left × right
+
+↓
+
+contribution = frequency × arr[i]
+
+↓
+
+answer = (answer + contribution) % mod
+
+---------------------------------------------------
+ONE-LINE MEMORIZATION
+---------------------------------------------------
+
+PSEE → Previous Smaller or Equal
+
+NSE → Next Smaller
+
+Stack stores INDICES
+
+arr[stack.peek()] gives VALUE
+
+left = i - PSEE
+
+right = NSE - i
+
+frequency = left × right
+
+contribution = frequency × arr[i]
+
+Use 1L to avoid overflow
+
+Take % mod after contribution and after addition
+
+Time : O(n)
+
+Space : O(n)
