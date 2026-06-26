@@ -1,0 +1,108 @@
+import java.util.*;
+
+class Solution {
+
+    // Find Next Smaller Element index
+    private int[] findNSE(int[] arr) {
+        Stack<Integer> st = new Stack<>();
+        int n = arr.length;
+        int[] ans = new int[n];
+
+        for (int i = n - 1; i >= 0; i--) {
+            while (!st.isEmpty() && arr[st.peek()] >= arr[i]) {
+                st.pop();                      // Remove bigger/equal elements
+            }
+            ans[i] = !st.isEmpty() ? st.peek() : n; // Store NSE index
+            st.push(i);                        // Push current index
+        }
+        return ans;
+    }
+
+    // Find Previous Smaller or Equal Element index
+    private int[] findPSEE(int[] arr) {
+        Stack<Integer> st = new Stack<>();
+        int n = arr.length;
+        int[] ans = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            while (!st.isEmpty() && arr[st.peek()] > arr[i]) {
+                st.pop();                      // Remove greater elements
+            }
+            ans[i] = !st.isEmpty() ? st.peek() : -1; // Store PSEE index
+            st.push(i);                        // Push current index
+        }
+        return ans;
+    }
+
+    // Calculate sum of subarray minimums
+    private long sumSubarrayMin(int[] arr) {
+        int n = arr.length;
+        int[] nse = findNSE(arr);
+        int[] psee = findPSEE(arr);
+
+        long total = 0;
+
+        for (int i = 0; i < n; i++) {
+            int left = i - psee[i];            // Elements on left
+            int right = nse[i] - i;            // Elements on right
+            total += 1L * left * right * arr[i]; // Add contribution
+        }
+        return total;
+    }
+
+    // Find Next Greater Element index
+    private int[] findNGE(int[] arr) {
+        Stack<Integer> st = new Stack<>();
+        int n = arr.length;
+        int[] ans = new int[n];
+
+        for (int i = n - 1; i >= 0; i--) {
+            while (!st.isEmpty() && arr[st.peek()] <= arr[i]) {
+                st.pop();                      // Remove smaller/equal elements
+            }
+            ans[i] = !st.isEmpty() ? st.peek() : n; // Store NGE index
+            st.push(i);                        // Push current index
+        }
+        return ans;
+    }
+
+    // Find Previous Greater or Equal Element index
+    private int[] findPGEE(int[] arr) {
+        Stack<Integer> st = new Stack<>();
+        int n = arr.length;
+        int[] ans = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            while (!st.isEmpty() && arr[st.peek()] < arr[i]) {
+                st.pop();                      // Remove smaller elements
+            }
+            ans[i] = !st.isEmpty() ? st.peek() : -1; // Store PGEE index
+            st.push(i);                        // Push current index
+        }
+        return ans;
+    }
+
+    // Calculate sum of subarray maximums
+    private long sumSubarrayMax(int[] arr) {
+        int n = arr.length;
+        int[] nge = findNGE(arr);
+        int[] pgee = findPGEE(arr);
+
+        long total = 0;
+
+        for (int i = 0; i < n; i++) {
+            int left = i - pgee[i];            // Elements on left
+            int right = nge[i] - i;            // Elements on right
+            total += 1L * left * right * arr[i]; // Add contribution
+        }
+        return total;
+    }
+
+    // Answer = Sum(Maximums) - Sum(Minimums)
+    public long subArrayRanges(int[] arr) {
+        return sumSubarrayMax(arr) - sumSubarrayMin(arr);
+    }
+}
+
+// Time Complexity : O(n)
+// Space Complexity : O(n)
