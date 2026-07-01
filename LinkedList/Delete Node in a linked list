@@ -1,0 +1,41 @@
+class Solution {
+
+    public void deleteNode(ListNode node) {
+
+        node.val = node.next.val;      // Copy the next node's value into the current node
+
+        node.next = node.next.next;    // Skip the next node, effectively deleting it
+
+    }
+}
+
+How to remember:
+
+Suppose the list is:
+
+1 → 2 → 3 → 4
+        ↑
+      node
+
+After line 1:
+
+node.val = node.next.val;
+1 → 2 → 4 → 4
+        ↑
+      node
+
+After line 2:
+
+node.next = node.next.next;
+1 → 2 → 4
+        ↑
+      node
+Interview trick
+node.val = node.next.val;      // Don't delete this node; make it look like the next node
+
+node.next = node.next.next;    // Remove the actual next node
+
+This is the easiest way to remember the logic:
+
+1st line: Copy the next node's data.
+2nd line: Delete the next node by skipping it.
