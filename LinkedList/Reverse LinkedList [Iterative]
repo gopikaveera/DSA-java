@@ -1,0 +1,60 @@
+Brute method : (using STACK)
+class Solution {
+    public ListNode reverseList(ListNode head) {
+
+        ListNode temp = head;
+        Stack<Integer> st = new Stack<>();
+
+        while (temp != null) {
+            st.push(temp.val);      // Push all node values into the stack
+            temp = temp.next;
+        }
+
+        temp = head;                // Start again from the head
+
+        while (temp != null) {
+            temp.val = st.pop();    // Pop the top value and assign it
+            temp = temp.next;
+        }
+
+        return head;
+    }
+}
+Time Complexity: O(n)
+Space Complexity: O(n) (because of the stack)
+
+
+Optimal: 
+class Solution {
+    public ListNode reverseList(ListNode head) {
+
+        ListNode temp = head;              // Start traversing from the head
+        ListNode prev = null;              // Previous node is initially null
+
+        while (temp != null) {             // Traverse until the end of the list
+
+            ListNode front = temp.next;    // Store the next node before changing the link
+
+            temp.next = prev;              // Reverse the current node's link
+
+            prev = temp;                   // Move prev one step forward
+
+            temp = front;                  // Move temp to the next node (saved in front)
+        }
+
+        return prev;                       // Prev becomes the new head after reversal
+    }
+}
+
+Time Complexity: O(n)
+Space Complexity: O(1)
+// REMEMBER:
+temp  → Current node
+prev  → Previous node
+front → Next node (saved before breaking the link)
+
+1. Save the next node.
+2. Reverse the current node's link.
+3. Move prev forward.
+4. Move temp forward.
+5. Repeat.
