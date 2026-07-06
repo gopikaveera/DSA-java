@@ -1,0 +1,22 @@
+// Recursive Method
+class Solution {
+
+    public ListNode reverseList(ListNode head) {
+
+        if (head == null || head.next == null)    // If list is empty or has only one node, return it
+            return head;
+
+        ListNode newHead = reverseList(head.next); // Recursively reverse the remaining list and get its new head   
+  //("Reverse the rest of the list and give me back the head of that reversed list.")
+
+        ListNode front = head.next;                // Store the next node (currently the last node of the reversed part)
+
+        front.next = head;                         // Reverse the link (next node points back to current node)
+
+        head.next = null;                          // Break the old forward link to avoid a cycle
+
+        return newHead;                            // Return the head of the completely reversed list
+    }
+}
+Time Complexity  : O(n)   // Each node is visited exactly once.
+Space Complexity : O(n)   // Recursive function calls use O(n) call stack space.
