@@ -1,3 +1,4 @@
+// Optimal : Tortoise & Hare Algorithm (Fast & Slow pointers)
 public class Solution {
     public boolean hasCycle(ListNode head) {
         ListNode slow=head;
