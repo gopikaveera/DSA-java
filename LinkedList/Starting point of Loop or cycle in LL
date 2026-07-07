@@ -1,0 +1,33 @@
+class Solution {
+    public ListNode detectCycle(ListNode head) {
+
+        ListNode slow = head;                  // Slow pointer starts from head
+        ListNode fast = head;                  // Fast pointer starts from head
+
+        while (fast != null && fast.next != null) {   // Traverse until fast reaches the end
+
+            slow = slow.next;                  // Move slow by one step
+
+            fast = fast.next.next;             // Move fast by two steps
+
+            if (fast == slow) {                // Slow and fast meet -> cycle exists
+
+                slow = head;                   // Move slow back to the head
+
+                while (slow != fast) {         // Move both one step at a time
+
+                    slow = slow.next;          // Move slow by one step
+
+                    fast = fast.next;          // Move fast by one step
+                }
+
+                return slow;                   // Meeting point is the start of the cycle (or return fast)
+            }
+        }
+
+        return null;                           // No cycle exists
+    }
+}
+
+Time Complexity  : O(n)   // Each pointer traverses at most O(n) nodes
+Space Complexity : O(1)   // Only two pointers (slow and fast) are used
