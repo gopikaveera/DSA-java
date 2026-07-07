@@ -1,0 +1,66 @@
+class Solution {
+
+    public ListNode reverseLinkedList(ListNode head) { //Reversing the list iteratively
+
+        ListNode temp = head;                   // Start from the head of the list
+        ListNode prev = null;                   // Previous node is initially null
+
+        while (temp != null) {                  // Traverse the linked list
+
+            ListNode front = temp.next;         // Store the next node before breaking the link
+
+            temp.next = prev;                   // Reverse the current node's link
+
+            prev = temp;                        // Move prev one step forward
+
+            temp = front;                       // Move temp to the next node
+        }
+
+        return prev;                            // Prev becomes the new head of the reversed list
+    }
+
+    public boolean isPalindrome(ListNode head) {  // MAIN FUNCTION
+
+        ListNode slow = head;                   // Slow pointer starts from head
+        ListNode fast = head;                   // Fast pointer starts from head
+
+        while (fast.next != null && fast.next.next != null) { // Find the middle of the linked list
+            slow = slow.next;                   // Move slow by one step
+            fast = fast.next.next;              // Move fast by two steps
+        }
+
+        ListNode newHead = reverseLinkedList(slow.next); // Reverse the second half of the list
+
+        ListNode first = head;                  // Pointer for the first half
+        ListNode second = newHead;              // Pointer for the reversed second half
+
+        while (second != null) {                // Compare both halves
+
+            if (first.val != second.val) {      // If values are different, not a palindrome
+
+                reverseLinkedList(newHead);     // Restore the original linked list
+
+                return false;                   // Return false
+            }
+
+            first = first.next;                 // Move first pointer
+
+            second = second.next;               // Move second pointer
+        }
+
+        reverseLinkedList(newHead);             // Restore the original linked list
+
+        return true;                            // All values matched, it is a palindrome
+    }
+}
+
+Palindrome in Linked List (Optimal)
+
+1. Find the middle using Slow & Fast pointers.
+2. Reverse the second half.
+3. Compare first half and reversed second half.
+4. Restore the second half.
+5. Return the result.
+
+Time Complexity  : O(n)   // Find middle O(n/2) + Reverse O(n/2) + Compare O(n/2) + Restore O(n/2) = O(2n)
+Space Complexity : O(1)   // Only pointers are used, no extra data structure
