@@ -1,0 +1,40 @@
+class Solution {
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+
+        ListNode t1 = list1;                    // Pointer to traverse list1
+        ListNode t2 = list2;                    // Pointer to traverse list2
+
+        ListNode dummyNode = new ListNode(-1);  // Dummy node to simplify merging
+        ListNode temp = dummyNode;              // Points to the last node of the merged list and its used to build the merged list
+
+        // Compare nodes from both lists until one list becomes empty
+        while (t1 != null && t2 != null) {
+
+            if (t1.val <= t2.val) {             // If list1 node is smaller or equal
+                temp.next = t1;                 // Attach list1 node to merged list
+                temp = t1;                      // Move temp to the newly attached node
+                t1 = t1.next;                   // Move to the next node in list1
+            } else {
+                temp.next = t2;                 // Attach list2 node to merged list
+                temp = t2;                      // Move temp to the newly attached node
+                t2 = t2.next;                   // Move to the next node in list2
+            }
+        }
+
+        // Attach the remaining nodes from the non-empty list
+        if (t1 == null) {
+            temp.next = t2;
+        } else {
+            temp.next = t1;
+        }
+
+        // Return the head of the merged list (skip the dummy node)
+        return dummyNode.next;
+    }
+}
+
+Time Complexity: O(m + n)
+- Traverse each node of both linked lists exactly once.
+
+Space Complexity: O(1)
+- Only a few extra pointers are used; existing nodes are reused.
