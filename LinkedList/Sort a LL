@@ -1,0 +1,73 @@
+class Solution {
+    public ListNode sortList(ListNode head) {
+
+        // Base case: Empty list or single node is already sorted
+        if (head == null || head.next == null)
+            return head;
+
+        // Find the middle of the linked list
+        ListNode middle = findmiddle(head); // tortoise & hare algo
+
+        // Split the list into two halves
+        ListNode lefthead = head;
+        ListNode righthead = middle.next;
+        middle.next = null;
+
+        // Recursively sort both halves
+        lefthead = sortList(lefthead);
+        righthead = sortList(righthead);
+
+        // Merge the sorted halves
+        return merge2LL(lefthead, righthead);
+    }
+
+    // Finds the middle node (returns the end of the left half)
+    public ListNode findmiddle(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head.next; // we need m1(in case of even LL)
+
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        return slow;
+    }
+
+    // Merges two sorted linked lists
+    public ListNode merge2LL(ListNode lefthead, ListNode righthead) {
+
+        ListNode t1 = lefthead;
+        ListNode t2 = righthead;
+
+        // Dummy node to simplify merging
+        ListNode dNode = new ListNode(-1);
+        ListNode temp = dNode;
+
+        // Compare nodes and attach the smaller one
+        while (t1 != null && t2 != null) {
+            if (t1.val <= t2.val) {
+                temp.next = t1;
+                temp = t1;
+                t1 = t1.next;
+            } else {
+                temp.next = t2;
+                temp = t2;
+                t2 = t2.next;
+            }
+        }
+
+        // Attach the remaining nodes
+        if (t1 != null)
+            temp.next = t1;
+        else
+            temp.next = t2;
+
+        // Return the head of the merged list
+        return dNode.next;
+    }
+}
+
+// Time Complexity: O(n log n)
+// Auxiliary Space: O(1)
+// Recursive Call Stack: O(log n)
