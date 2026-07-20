@@ -1,0 +1,40 @@
+/**
+ * Approach:
+ * 1. Use two pointers, one for each linked list.
+ * 2. Traverse both lists simultaneously.
+ * 3. When a pointer reaches the end, move it to the head of the other list.
+ * 4. If an intersection exists, both pointers will meet there.
+ * 5. Otherwise, both pointers will become null at the same time.
+
+public class Solution {
+
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+
+        ListNode t1 = headA;
+        ListNode t2 = headB;
+
+        while (t1 != t2) {
+
+            if (t1 == null) {
+                t1 = headB;
+            } else {
+                t1 = t1.next;
+            }
+
+            if (t2 == null) {
+                t2 = headA;
+            } else {
+                t2 = t2.next;
+            }
+        }
+
+        return t1;
+    }
+}
+/*
+Time Complexity: O(N + M)
+- Each pointer traverses both lists at most once.
+
+Space Complexity: O(1)
+- No extra space is used.
+*/
