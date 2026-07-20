@@ -1,0 +1,65 @@
+/**
+ * Approach:
+ * Use a Min Heap (Priority Queue) to always pick the smallest node among the current heads of all linked lists.
+ * Initially, insert only the head node of every linked list into the heap.
+ * Remove the smallest node, attach it to the answer, and insert its next node into the heap. Repeat until the heap becomes empty.
+
+ **/
+
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+
+        // Min Heap based on node value
+        PriorityQueue<ListNode> pq = new PriorityQueue<>(
+            (a, b) -> a.val - b.val
+        );
+
+        // Insert the head node of every linked list
+        for (int i = 0; i < lists.length; i++) {
+            if (lists[i] != null) {
+                pq.offer(lists[i]);
+            }
+        }
+
+        // Dummy node for building the merged list
+        ListNode dummy = new ListNode(-1);
+        ListNode temp = dummy;
+
+        // Continue until all nodes are processed
+        while (!pq.isEmpty()) {
+
+            // Get the smallest node
+            ListNode node = pq.poll();
+
+            // Attach it to the merged list
+            temp.next = node;
+            temp = temp.next;
+
+            // Insert the next node from the same linked list
+            if (node.next != null) {
+                pq.offer(node.next);
+            }
+        }
+
+        return dummy.next;
+    }
+}
+/*
+Approach:
+1. Use a Min Heap (Priority Queue) to always get the smallest node.
+2. Initially, insert only the head node of each linked list into the heap.
+3. Remove the smallest node and attach it to the answer.
+4. If the removed node has a next node, insert it into the heap.
+5. Repeat until the heap becomes empty.
+
+Time Complexity: O(N log K)
+- N = Total number of nodes.
+- K = Number of linked lists.
+- Each node is inserted into the heap once and removed once.
+- Every offer() and poll() operation takes O(log K).
+- Therefore, total time = O(N log K).
+
+Space Complexity: O(K)
+- The Priority Queue stores at most one node from each linked list.
+- So the maximum size of the heap is K.
+*/
