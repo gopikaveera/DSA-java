@@ -1,0 +1,54 @@
+
+class Solution {
+
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+
+        // Dummy node to simplify result list creation
+        ListNode dNode = new ListNode(-1);
+
+        // Pointer used to build the answer
+        ListNode temp = dNode;
+
+        // Initially there is no carry
+        int carry = 0;
+
+        // Traverse until both lists and carry are exhausted
+        while (l1 != null || l2 != null || carry != 0) {
+
+            int sum = 0;
+
+            // Add digit from first list
+            if (l1 != null) {
+                sum += l1.val;
+                l1 = l1.next;
+            }
+
+            // Add digit from second list
+            if (l2 != null) {
+                sum += l2.val;
+                l2 = l2.next;
+            }
+
+            // Add previous carry
+            sum += carry;
+
+            // Calculate new carry
+            carry = sum / 10;
+
+            // Create node with current digit
+            ListNode newNode = new ListNode(sum % 10);
+
+            // Attach node to answer list
+            temp.next = newNode;
+
+            // Move pointer
+            temp = temp.next;
+        }
+
+        // Return the actual head (skip dummy node)
+        return dNode.next;
+    }
+}
+Time Complexity: O(max(l1, l2)) because each node is processed once.
+Auxiliary Space: O(1) because no extra data structure is used apart from the output list.
+Total Space (including output): O(max(l1,l2)).
