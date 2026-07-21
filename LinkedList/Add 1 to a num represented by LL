@@ -1,0 +1,60 @@
+class Solution {
+
+    // Recursive function that returns the carry (0 or 1)
+    static int helper(Node temp) {
+
+        // Base case:
+        // If we've moved past the last node,
+        // return 1 because we need to add one to the number.
+        if (temp == null)
+            return 1;
+
+        // Go to the next node first.
+        // This makes recursion reach the last digit.
+        int carry = helper(temp.next);
+
+        // Add the carry returned from the next node.
+        temp.data = temp.data + carry;
+
+        // If the digit is less than 10,
+        // there is no carry.
+        if (temp.data < 10)
+            return 0;
+
+        // If the digit becomes 10,
+        // store 0 in the current node.
+        temp.data = 0;
+
+        // Return carry = 1 to the previous node.
+        return 1;
+    }
+
+    public static Node addOne(Node head) {
+
+        // Call helper() on the entire linked list.
+        // It updates all node values and returns
+        // the final carry.
+        int carry = helper(head);
+
+        // If carry is still 1,
+        // create a new node at the beginning.
+        if (carry == 1) {
+
+            Node newNode = new Node(1);
+
+            // Connect the new node to the old head.
+            newNode.next = head;
+
+            // New node becomes the new head.
+            return newNode;
+        }
+
+        // If carry is 0,
+        // simply return the updated list.
+        return head;
+    }
+}
+| Complexity           | Value    | Reason                                                  |
+| -------------------- | -------- | ------------------------------------------------------- |
+| Time Complexity  | O(n) | Every node is visited exactly once.                     |
+| Space Complexity | O(n) | Recursive call stack stores one function call per node. |
