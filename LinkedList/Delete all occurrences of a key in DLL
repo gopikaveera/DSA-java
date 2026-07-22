@@ -1,0 +1,53 @@
+class Solution {
+
+    static Node deleteAllOccurOfX(Node head, int x) {
+
+        // Pointer used to traverse the DLL
+        Node temp = head;
+
+        // Traverse the entire linked list
+        while (temp != null) {
+
+            // Store the next node before deleting the current node
+            Node front = temp.next;
+
+            // Delete the current node if its value equals x
+            if (temp.data == x) {
+
+                // If current node is the head, move head to the next node
+                if (temp == head) {
+                    head = front;
+                }
+
+                // Previous node of current node
+                Node back = temp.prev;
+
+                // Connect previous node to next node
+                if (back != null) {
+                    back.next = front;
+                }
+
+                // Connect next node to previous node
+                if (front != null) {
+                    front.prev = back;
+                }
+            }
+
+            // Move to the next node
+            temp = front;
+        }
+
+        return head;
+    }
+}
+Time Complexity: O(n)
+Every node is visited exactly once.
+
+Space Complexity:
+Auxiliary Space: O(1)
+
+Only three pointers are used:
+temp
+front
+back
+No extra data structure is used.
