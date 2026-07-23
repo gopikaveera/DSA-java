@@ -1,0 +1,50 @@
+class Solution {
+
+    public static ArrayList<ArrayList<Integer>> findPairsWithGivenSum(int target, Node head) {
+
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<>(); // Stores all valid pairs.
+
+        if (head == null) return ans; // Empty DLL, so no pairs.
+
+        Node left = head; // Left pointer starts from the first node.
+        Node right = head; // Used to reach the last node.
+
+        while (right.next != null) { // Move right pointer to the last node.
+            right = right.next;
+        }
+
+        while (left != right && left.prev != right) { // Continue until pointers meet or cross.
+
+            int sum = left.data + right.data; // Calculate the current pair sum.
+
+            if (sum == target) { // Pair found.
+
+                ArrayList<Integer> pair = new ArrayList<>(); // Store one valid pair.
+                pair.add(left.data); // Add left value.
+                pair.add(right.data); // Add right value.
+
+                ans.add(pair); // Add the pair to the answer.
+
+                left = left.next; // Move left forward.
+                right = right.prev; // Move right backward.
+            }
+
+            else if (sum < target) {
+                left = left.next; // Sum is smaller, so move left to increase the sum.
+            }
+
+            else {
+                right = right.prev; // Sum is larger, so move right to decrease the sum.
+            }
+        }
+
+        return ans; // Return all pairs.
+    }
+}
+Complexity:
+Time Complexity: O(n)
+    Finding the last node takes -O(n).
+    The two pointers together traverse the DLL only once, so the total remains O(n).
+Auxiliary Space: O(1)
+    Only left, right, and a few variables are used. The output list is not counted.
+Total Space: O(k) ,where k is the number of pairs stored in the answer.
