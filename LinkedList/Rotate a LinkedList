@@ -1,0 +1,56 @@
+class Solution {
+
+    public ListNode rotateRight(ListNode head, int k) {
+
+        if (head == null || head.next == null || k == 0)
+            return head;    // No rotation needed for empty, single-node list, or k = 0.
+
+        int len = 1;
+        ListNode tail = head;
+
+        while (tail.next != null) { // Find the length and the last node.
+            len++;
+            tail = tail.next;
+        }
+
+        k = k % len; // Remove unnecessary full rotations.
+
+        if (k == 0)
+            return head; // List remains unchanged.
+
+        tail.next = head; // Make the linked list circular.
+
+        ListNode newLastNode = findNthNode(head, len - k); // Find the new last node.
+
+        ListNode newHead = newLastNode.next; // Node after new last node becomes the new head.
+
+        newLastNode.next = null; // Break the circular link.
+
+        return newHead; // Return the new head.
+    }
+
+    public ListNode findNthNode(ListNode temp, int k) {
+
+        int cnt = 1;
+
+        while (temp != null) { // Traverse to the kth node.
+
+            if (cnt == k)
+                return temp;
+
+            cnt++;
+            temp = temp.next;
+        }
+
+        return null;
+    }
+}
+Time Complexity: O(n)
+One traversal to find the length and last node.
+Another traversal to find the (length - k)th node.
+Overall time complexity is O(n).
+
+Auxiliary Space: O(1)
+Only a few pointer variables are used.
+No extra data structures are created.
+Total Space: O(1)
