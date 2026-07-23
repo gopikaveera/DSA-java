@@ -1,0 +1,30 @@
+class Solution {
+
+    Node removeDuplicates(Node head) {
+
+        if (head == null || head.next == null) return head; // Empty or single-node DLL.
+
+        Node temp = head; // Start traversing from the head.
+
+        while (temp != null && temp.next != null) { // Traverse while a next node exists.
+
+            Node nextNode = temp.next; // Start checking from the next node.
+
+            while (nextNode != null && nextNode.data == temp.data) { // Skip all duplicate nodes.
+                nextNode = nextNode.next;
+            }
+
+            temp.next = nextNode; // Connect current node to the next distinct node.
+
+            if (nextNode != null) {
+                nextNode.prev = temp; // Update the previous pointer of the next distinct node.
+            }
+
+            temp = temp.next; // Move to the next distinct node.
+        }
+
+        return head; // Return the modified DLL.
+    }
+}
+Time Complexity: O(n) – Every node is visited at most once while traversing the sorted doubly linked list and skipping duplicates.
+Auxiliary Space: O(1) – Only a few pointer variables are used; no extra space proportional to the input size is required.
