@@ -1,0 +1,35 @@
+/**
+ * Approach:
+ * - Create an empty list to store the inorder traversal.
+ * - Use a recursive helper function to traverse the tree.
+ * - Follow the inorder sequence:
+ *      1. Traverse the left subtree.
+ *      2. Visit the current node and add its value to the list.
+ *      3. Traverse the right subtree.
+ * - Return the final list containing the inorder traversal.
+ *
+ * Time Complexity: O(n)
+ * - Every node is visited exactly once.
+ *
+ * Space Complexity: O(h)
+ * - h is the height of the tree due to the recursion stack.
+ * - Best Case (Balanced Tree): O(log n)
+ * - Worst Case (Skewed Tree): O(n)
+ */
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> arr = new ArrayList<>();
+        inorder(root, arr);
+        return arr;
+    }
+
+    public void inorder(TreeNode root, List<Integer> arr) {
+        if (root == null) {
+            return;
+        }
+
+        inorder(root.left, arr);
+        arr.add(root.val);
+        inorder(root.right, arr);
+    }
+}
