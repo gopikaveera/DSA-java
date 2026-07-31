@@ -1,0 +1,39 @@
+/**
+ * Approach:
+ * - Create an empty list to store the postorder traversal.
+ * - Use a recursive helper function to traverse the tree.
+ * - Follow the postorder sequence:
+ *      1. Traverse the left subtree.
+ *      2. Traverse the right subtree.
+ *      3. Visit the current node and add its value to the list.
+ * - Return the final list containing the postorder traversal.
+ *
+ * Time Complexity: O(n)
+ * - Every node is visited exactly once.
+ *
+ * Space Complexity: O(h)
+ * - h is the height of the tree due to the recursion stack.
+ * - Best Case (Balanced Tree): O(log n)
+ * - Worst Case (Skewed Tree): O(n)
+ */
+class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> arr = new ArrayList<>();
+        postorder(root, arr);
+        return arr;
+    }
+
+    public void postorder(TreeNode root, List<Integer> arr) {
+        if (root == null) {
+            return;
+        }
+
+        postorder(root.left, arr);
+        postorder(root.right, arr);
+        arr.add(root.val);
+    }
+}
+keep in mind:
+Who creates the list? → Main function.(empty list)
+Who fills the list? → Helper function.
+Why pass arr? → So every recursive call uses the same list instead of creating a new one.
