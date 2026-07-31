@@ -1,0 +1,35 @@
+/**
+ * Approach:
+ * - Create an empty list to store the preorder traversal.
+ * - Use a recursive helper function to traverse the tree.
+ * - Follow the preorder sequence:
+ *      1. Visit the current node and add its value to the list.
+ *      2. Traverse the left subtree.
+ *      3. Traverse the right subtree.
+ * - Return the final list containing the preorder traversal.
+ *
+ * Time Complexity: O(n)
+ * - Every node is visited exactly once.
+ *
+ * Space Complexity: O(h)
+ * - h is the height of the tree due to the recursion stack.
+ * - Best Case (Balanced Tree): O(log n)
+ * - Worst Case (Skewed Tree): O(n)
+ */
+class Solution {
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> arr = new ArrayList<>();
+        preorder(root, arr);
+        return arr;
+    }
+
+    public void preorder(TreeNode root, List<Integer> arr) {
+        if (root == null) {
+            return;
+        }
+
+        arr.add(root.val);
+        preorder(root.left, arr);
+        preorder(root.right, arr);
+    }
+}
