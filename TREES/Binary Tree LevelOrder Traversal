@@ -1,0 +1,69 @@
+/**
+ * Approach:
+ * - Use Breadth-First Search (BFS) with a Queue.
+ * - Process one level at a time.
+ * - Store each level in a separate list.
+ * - Add every level list to the final answer.
+ *
+ * Time Complexity: O(n)
+ * - Every node is visited exactly once.
+ *
+ * Space Complexity: O(n)
+ * - In the worst case, the queue stores all nodes of the widest level.
+ */
+
+class Solution {
+    public List<List<Integer>> levelOrder(TreeNode root) {
+
+        // Stores the final answer.
+        // Each element represents one level of the tree.
+        List<List<Integer>> ans = new ArrayList<>();
+
+        // If the tree is empty, return an empty list.
+        if (root == null) {
+            return ans;
+        }
+
+        // Queue is used for Breadth First Search (Level Order Traversal).
+        Queue<TreeNode> q = new LinkedList<>();
+
+        // Add the root node to start the traversal.
+        q.add(root);
+
+        // Continue until all nodes are processed.
+        while (!q.isEmpty()) {
+
+            // Number of nodes present in the current level.
+            int size = q.size();
+
+            // Stores values of the current level.
+            List<Integer> level = new ArrayList<>();
+
+            // Process only the nodes of the current level.
+            for (int i = 0; i < size; i++) {
+
+                // Remove the front node from the queue.
+                TreeNode node = q.poll();
+
+                // Store the current node's value.
+                level.add(node.val);
+
+                // If left child exists, add it to the queue.
+                if (node.left != null) {
+                    q.add(node.left);
+                }
+
+                // If right child exists, add it to the queue.
+                if (node.right != null) {
+                    q.add(node.right);
+                }
+            }
+
+            // Add the completed level to the final answer.
+            ans.add(level);
+        }
+
+        // Return the level order traversal.
+        return ans;
+    }
+}
