@@ -1,0 +1,54 @@
+/**
+ * Approach:
+ * - Use a stack to simulate recursive inorder traversal.
+ * - Move to the leftmost node while pushing every node onto the stack.
+ * - When no left child exists:
+ *      1. Pop the top node.
+ *      2. Visit it.
+ *      3. Move to its right child.
+ * - Repeat until both the stack is empty and the current node is null.
+ *
+ * Time Complexity: O(n)
+ * - Every node is pushed and popped exactly once.
+ *
+ * Space Complexity: O(h)
+ * - h is the height of the tree.
+ * - Best Case (Balanced Tree): O(log n)
+ * - Worst Case (Skewed Tree): O(n)
+ */
+
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+
+        // Stores the inorder traversal.
+        List<Integer> ans = new ArrayList<>();
+
+        // Stack is used instead of recursion.
+        Stack<TreeNode> st = new Stack<>();
+
+        // Start from the root node.
+        TreeNode node = root;
+
+        // Continue until both the stack is empty and node becomes null.
+        while (node != null || !st.isEmpty()) {
+
+            // Push all the left nodes into the stack.
+            while (node != null) {
+                st.push(node);
+                node = node.left;
+            }
+
+            // Pop the top node.
+            node = st.pop();
+
+            // Visit the current node.
+            ans.add(node.val);
+
+            // Move to the right subtree.
+            node = node.right;
+        }
+
+        // Return the inorder traversal.
+        return ans;
+    }
+}
