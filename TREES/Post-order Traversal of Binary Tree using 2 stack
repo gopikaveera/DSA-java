@@ -1,0 +1,71 @@
+/**
+ * Approach:
+ * - Use two stacks to perform iterative postorder traversal.
+ * - Stack 1 is used for processing nodes.
+ * - Stack 2 stores nodes in reverse postorder.
+ * - Steps:
+ *      1. Push the root into Stack 1.
+ *      2. Pop a node from Stack 1 and push it into Stack 2.
+ *      3. Push the left child into Stack 1.
+ *      4. Push the right child into Stack 1.
+ *      5. Repeat until Stack 1 becomes empty.
+ *      6. Pop all nodes from Stack 2 and store their values.
+ *
+ * Time Complexity: O(n)
+ * - Every node is pushed and popped exactly once from both stacks.
+ *
+ * Space Complexity: O(n)
+ * - Two stacks together store at most n nodes.
+ */
+
+class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+
+        // Stores the final postorder traversal.
+        List<Integer> ans = new ArrayList<>();
+
+        // If the tree is empty, return an empty list.
+        if (root == null) {
+            return ans;
+        }
+
+        // Stack 1 is used for traversal.
+        Stack<TreeNode> st1 = new Stack<>();
+
+        // Stack 2 stores nodes in reverse postorder.
+        Stack<TreeNode> st2 = new Stack<>();
+
+        // Push the root node into Stack 1.
+        st1.push(root);
+
+        // Continue until Stack 1 becomes empty.
+        while (!st1.isEmpty()) {
+
+            // Remove the top node from Stack 1.
+            TreeNode node = st1.pop();
+
+            // Push it into Stack 2.
+            st2.push(node);
+
+            // Push the left child into Stack 1.
+            if (node.left != null) {
+                st1.push(node.left);
+            }
+
+            // Push the right child into Stack 1.
+            if (node.right != null) {
+                st1.push(node.right);
+            }
+        }
+
+        // Pop all nodes from Stack 2.
+        while (!st2.isEmpty()) {
+
+            // Store the node value.
+            ans.add(st2.pop().val);
+        }
+
+        // Return the postorder traversal.
+        return ans;
+    }
+}
