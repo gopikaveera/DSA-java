@@ -1,0 +1,59 @@
+/**
+ * Approach:
+ * - Use a stack to simulate recursion.
+ * - Push the root node onto the stack.
+ * - While the stack is not empty:
+ *      1. Pop the top node.
+ *      2. Add its value to the answer.
+ *      3. Push its right child first.
+ *      4. Push its left child next.
+ * - Since the stack is LIFO, the left child is processed before the right child.
+ *
+ * Time Complexity: O(n)
+ * - Every node is visited exactly once.
+ *
+ * Space Complexity: O(n)
+ * - In the worst case (skewed tree), the stack stores all nodes.
+ */
+
+class Solution {
+    public List<Integer> preorderTraversal(TreeNode root) {
+
+        // Stores the preorder traversal.
+        List<Integer> ans = new ArrayList<>();
+
+        // If the tree is empty, return an empty list.
+        if (root == null) {
+            return ans;
+        }
+
+        // Stack is used instead of recursion.
+        Stack<TreeNode> st = new Stack<>();
+
+        // Push the root node.
+        st.push(root);
+
+        // Continue until the stack becomes empty.
+        while (!st.isEmpty()) {
+
+            // Remove the top node.
+            TreeNode node = st.pop();
+
+            // Visit the current node.
+            ans.add(node.val);
+
+            // Push the right child first.
+            if (node.right != null) {
+                st.push(node.right);
+            }
+
+            // Push the left child next.
+            if (node.left != null) {
+                st.push(node.left);
+            }
+        }
+
+        // Return the preorder traversal.
+        return ans;
+    }
+}
