@@ -1,0 +1,102 @@
+/**
+ * Approach:
+ * - Use Recursion (Depth First Search).
+ * - Recursively calculate the depth of the left subtree.
+ * - Recursively calculate the depth of the right subtree.
+ * - The depth of the current node is:
+ *      1 + maximum(left depth, right depth)
+ *
+ * Time Complexity: O(N)
+ * - Every node is visited exactly once.
+ *
+ * Space Complexity: O(H)
+ * - H is the height of the tree (recursive call stack).
+ * - Best Case (Balanced Tree): O(log N)
+ * - Worst Case (Skewed Tree): O(N)
+ */
+
+class Solution {
+    public int maxDepth(TreeNode root) {
+
+        // Base Case:
+        // If the current node is null,
+        // its depth is 0.
+        if (root == null)
+            return 0;
+
+        // Recursively find the depth
+        // of the left subtree.
+        int lh = maxDepth(root.left);
+
+        // Recursively find the depth
+        // of the right subtree.
+        int rh = maxDepth(root.right);
+
+        // Current node contributes 1 to the depth.
+        // Return the maximum depth between
+        // left and right subtree.
+        return 1 + Math.max(lh, rh);
+    }
+}
+
+/**
+ * Approach:
+ * - Use Level Order Traversal (BFS).
+ * - Process the tree level by level using a Queue.
+ * - Every completed level increases the depth by 1.
+ *
+ * Time Complexity: O(N)
+ * - Every node is inserted into the queue once.
+ * - Every node is removed from the queue once.
+ *
+ * Space Complexity: O(N)
+ * - In the worst case, the queue may contain all nodes of one level.
+ */
+
+class Solution {
+    public int maxDepth(TreeNode root) {
+
+        // If the tree is empty, its depth is 0.
+        if (root == null)
+            return 0;
+
+        // Queue is used for Level Order Traversal (BFS).
+        Queue<TreeNode> q = new LinkedList<>();
+
+        // Insert the root node into the queue.
+        q.offer(root);
+
+        // Stores the maximum depth (number of levels).
+        int depth = 0;
+
+        // Continue until all nodes are processed.
+        while (!q.isEmpty()) {
+
+            // A new level is starting.
+            depth++;
+
+            // Number of nodes present in the current level.
+            int size = q.size();
+
+            // Process all nodes of the current level.
+            for (int i = 0; i < size; i++) {  //"Process only the nodes that were already in the queue when this level started."
+
+                // Remove the front node from the queue.
+                TreeNode node = q.poll();
+     //For the node we removed,check whether left and right child exists?
+                // Add the left child to the queue.
+                if (node.left != null) {
+                    q.offer(node.left);
+                }
+
+                // Add the right child to the queue.
+                if (node.right != null) {
+                    q.offer(node.right);
+                }
+            }
+        }
+
+        // Return the maximum depth of the tree.
+        return depth;
+    }
+}
