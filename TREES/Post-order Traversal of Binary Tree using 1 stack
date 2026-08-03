@@ -1,0 +1,89 @@
+class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+
+        List<Integer> ans = new ArrayList<>();
+        Stack<TreeNode> st = new Stack<>();
+
+        TreeNode node = root;
+
+        while (node != null || !st.isEmpty()) {
+
+            // Go to the leftmost node
+            while (node != null) {
+                st.push(node);
+                node = node.left;
+            }
+
+            // Check the right subtree
+            TreeNode temp = st.peek().right;
+
+            if (temp == null) {
+
+                // Visit the current node
+                temp = st.pop();
+                ans.add(temp.val);
+
+                // Visit parent nodes whose right subtree is already processed
+                while (!st.isEmpty() && temp == st.peek().right) {
+                    temp = st.pop();
+                    ans.add(temp.val);
+                }
+
+            } else {
+                // Move to the right subtree
+                node = temp;
+            }
+        }
+
+        return ans;
+    }
+}
+Start from root
+
+↓
+
+Keep pushing left nodes
+
+↓
+
+Left becomes null
+
+↓
+
+Look at top node
+
+↓
+
+Does it have a right child?
+
+YES
+
+↓
+
+Go to right child
+
+↓
+
+Again go left
+
+-------------------------
+
+NO
+
+↓
+
+Visit node
+
+↓
+
+Check parent
+
+↓
+
+If parent's right subtree is also finished
+
+Visit parent
+
+↓
+
+Repeat
