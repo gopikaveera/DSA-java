@@ -1,0 +1,247 @@
+/**
+ * Approach:
+ * - Use one stack and a custom Pair class.
+ * - Every Pair stores:
+ *      1. TreeNode
+ *      2. Current traversal state
+ *
+ * State 1 -> Preorder
+ * State 2 -> Inorder
+ * State 3 -> Postorder
+ *
+ * Time Complexity: O(N)
+ * - Each node is processed 3 times (actual work = 3N).
+ * - Ignoring constants, the complexity becomes O(N).
+ *
+ * Space Complexity: O(N)
+ * - The stack stores Pair objects.
+ * - In the worst case (skewed tree), all nodes may be present in the stack.
+ */
+
+class Pair {
+
+    // Stores the current tree node.
+    TreeNode node;
+
+    // Stores the traversal state.
+    // 1 -> Preorder
+    // 2 -> Inorder
+    // 3 -> Postorder
+    int num;
+
+    // Constructor to initialize node and state.
+    Pair(TreeNode node, int num) {
+        this.node = node;
+        this.num = num;
+    }
+}
+
+class Solution {
+
+    public void preInPostTraversal(TreeNode root) {
+
+        // If the tree is empty, nothing to traverse.
+        if (root == null)
+            return;
+
+        // Stack stores Pair objects instead of only TreeNodes.
+        // Each Pair keeps both the node and its traversal state.
+        Stack<Pair> st = new Stack<>();
+
+        // Push the root node with state = 1.
+        // State 1 means this node has to perform preorder first.
+        st.push(new Pair(root, 1));
+
+        // Stores preorder traversal.
+        List<Integer> pre = new ArrayList<>();
+
+        // Stores inorder traversal.
+        List<Integer> in = new ArrayList<>();
+
+        // Stores postorder traversal.
+        List<Integer> post = new ArrayList<>();
+
+        // Continue until every node is completely processed.
+        while (!st.isEmpty()) {
+
+            // Remove the top Pair from the stack.
+            Pair it = st.pop();
+
+            //===================================================
+            // STATE 1 -> PREORDER
+            //===================================================
+            if (it.num == 1) {
+
+                // First visit of this node.
+                // So perform preorder.
+                pre.add(it.node.val);
+
+                // Increase the state.
+                // Next time this node comes,
+                // it should perform inorder.
+                it.num++;
+
+                // Push the same node back because
+                // inorder and postorder are still pending.
+                st.push(it);
+
+                // Move to the left subtree.
+                // Left child always starts with state = 1.
+                if (it.node.left != null) {
+                    st.push(new Pair(it.node.left, 1));
+                }
+            }
+
+            //===================================================
+            // STATE 2 -> INORDER
+            //===================================================
+            else if (it.num == 2) {
+
+                // Second visit of this node.
+                // Perform inorder.
+                in.add(it.node.val);
+
+                // Increase the state.
+                // Next time this node comes,
+                // it should perform postorder.
+                it.num++;
+
+                // Push the same node back because
+                // postorder is still pending.
+                st.push(it);
+
+                // Move to the right subtree.
+                // Right child also starts with state = 1.
+                if (it.node.right != null) {
+                    st.push(new Pair(it.node.right, 1));
+                }
+            }
+
+            //===================================================
+            // STATE 3 -> POSTORDER
+            //===================================================
+            else {
+
+                // Third visit of this node.
+                // Perform postorder.
+                post.add(it.node.val);
+
+                // Do NOT push this node again.
+                // All three traversals are completed.
+            }
+        }
+
+        // Print all three traversals.
+        System.out.println("Preorder  : " + pre);
+        System.out.println("Inorder   : " + in);
+        System.out.println("Postorder : " + post);
+    }
+}
+STATE 1
+
+↓
+
+Preorder
+
+↓
+
+Increase State
+
+↓
+
+Push Back
+
+↓
+
+Go Left
+
+---------------------------------
+
+STATE 2
+
+↓
+
+Inorder
+
+↓
+
+Increase State
+
+↓
+
+Push Back
+
+↓
+
+Go Right
+
+---------------------------------
+
+STATE 3
+
+↓
+
+Postorder
+
+↓
+
+Finished
+⭐ Memory Notes:
+->Why do we use Pair?
+A TreeNode only stores:
+- value
+- left child
+- right child
+
+But this algorithm also needs to remember
+which traversal is currently being performed.
+
+So we create:
+Pair = (TreeNode, State)
+
+->Why new Pair(root,1)?
+Create a new object that stores:
+
+Node = root
+State = 1 (Preorder)
+Then push that single object into the stack.
+
+->Why st.push(it) again?
+Because the same node still has work left.
+
+State 1 -> Preorder completed
+
+Still need:
+
+State 2 -> Inorder
+
+State 3 -> Postorder
+
+So push it back after increasing its state.
+
+->Why it.num++?
+1 -> 2
+
+Meaning:
+
+Next time perform Inorder.
+
+
+2 -> 3
+
+Meaning:
+
+Next time perform Postorder.
+
+->Why new Pair(it.node.left,1)?
+Whenever we move to a new child,
+
+it always starts from State = 1.
+
+Because no traversal has been done
+for that child yet.
+
+⭐ One-Line Memory Trick
+State 1 → PRE → Push Back → Go Left
+State 2 → IN → Push Back → Go Right
+State 3 → POST → Finished
