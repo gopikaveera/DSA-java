@@ -1,0 +1,180 @@
+/**
+ * Approach (OPTIMAL):
+ * - Use a single DFS traversal.
+ * - The helper function returns:
+ *      Height of the subtree if it is balanced.
+ *      -1 if the subtree is not balanced.
+ *
+ * - If any subtree is unbalanced,
+ *   immediately return -1 without checking further.
+ *
+ * Time Complexity: O(N)
+ * - Every node is visited exactly once.
+ *
+ * Space Complexity: O(H)
+ * - H is the height of the tree (recursive stack).
+ * - Best Case (Balanced Tree): O(log N)
+ * - Worst Case (Skewed Tree): O(N)
+ */
+
+class Solution {
+
+    // Main function
+    public boolean isBalanced(TreeNode root) {
+
+        // If dfsHeight returns -1,
+        // the tree is not balanced.
+        // Otherwise, it is balanced.
+        return dfsHeight(root) != -1;
+    }
+
+    // Helper function to calculate height
+    // and detect imbalance simultaneously.
+    public int dfsHeight(TreeNode root) {
+
+        // Base Case:
+        // Empty tree has height 0.
+        if (root == null)
+            return 0;
+
+        // Calculate left subtree height.
+        int lh = dfsHeight(root.left);
+
+        // If left subtree is already unbalanced,
+        // immediately return -1.
+        if (lh == -1)
+            return -1;
+
+        // Calculate right subtree height.
+        int rh = dfsHeight(root.right);
+
+        // If right subtree is already unbalanced,
+        // immediately return -1.
+        if (rh == -1)
+            return -1;
+
+        // Check whether the current node is balanced.
+        // If the height difference is more than 1,
+        // return -1 to indicate imbalance.
+        if (Math.abs(lh - rh) > 1)
+            return -1;
+
+        // Current subtree is balanced.
+        // Return its height.
+        return 1 + Math.max(lh, rh);
+    }
+}
+/**
+ * Approach (BRUTE FORCE):
+ * - For every node:
+ *      1. Find the height of the left subtree.
+ *      2. Find the height of the right subtree.
+ *      3. If the height difference is greater than 1,
+ *         the tree is not balanced.
+ *      4. Recursively check whether the left subtree
+ *         and the right subtree are balanced.
+ *
+ * Time Complexity: O(N²)
+ * - At every node, the height of its subtrees is calculated.
+ * - Height calculation takes O(N) in the worst case.
+ * - Therefore, O(N) × O(N) = O(N²).
+ *
+ * Space Complexity: O(H)
+ * - H is the height of the tree (recursive call stack).
+ * - Best Case (Balanced Tree): O(log N)
+ * - Worst Case (Skewed Tree): O(N)
+ */
+
+class Solution {
+
+    // Main function to check whether the tree is balanced.
+    public boolean isBalanced(TreeNode root) {
+
+        // Base Case:
+        // An empty tree is always balanced.
+        if (root == null)
+            return true;
+
+       // Find the height of the left subtree.
+      // This is used to check whether the CURRENT NODE is balanced.
+    int lh = findHeight(root.left);
+
+// Find the height of the right subtree.
+// This is also used to check whether the CURRENT NODE is balanced.
+int rh = findHeight(root.right);
+
+// If the height difference is greater than 1,
+// the CURRENT NODE is not balanced.
+if (Math.abs(lh - rh) > 1)
+    return false;
+
+// The current node is balanced.
+// Now recursively check whether the LEFT subtree is balanced.
+boolean left = isBalanced(root.left);
+
+// Recursively check whether the RIGHT subtree is balanced.
+boolean right = isBalanced(root.right);
+
+// If either subtree is not balanced,
+// the entire tree is not balanced.
+if (!left || !right)
+    return false;
+
+// Both the current node and its
+// left & right subtrees are balanced.
+return true;
+    }
+
+    // Helper function to calculate the height
+    // of a given tree/subtree.
+    public int findHeight(TreeNode root) {
+
+        // Base Case:
+        // Empty tree has height 0.
+        if (root == null)
+            return 0;
+
+        // Recursively calculate the height
+        // of the left subtree.
+        int lh = findHeight(root.left);
+
+        // Recursively calculate the height
+        // of the right subtree.
+        int rh = findHeight(root.right);
+
+        // Height of current node =
+        // 1 + maximum of left and right subtree heights.
+        return 1 + Math.max(lh, rh);
+    }
+}
+
+At every node, perform TWO checks.
+
+CHECK 1:
+Current Node
+
+↓
+
+Find Left Height
+
+↓
+
+Find Right Height
+
+↓
+
+Is |LH - RH| <= 1 ?
+
+----------------------------
+
+CHECK 2:
+Left Subtree Balanced?
+
+↓
+
+Right Subtree Balanced?
+
+↓
+
+If both are true,
+the current tree is balanced.
