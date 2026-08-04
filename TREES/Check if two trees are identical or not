@@ -1,0 +1,45 @@
+/**
+ * Approach:
+ * - Compare both trees recursively.
+ * - If either node is null, check whether both are null.
+ * - If both nodes exist, compare:
+ *      1. Current node values.
+ *      2. Left subtrees.
+ *      3. Right subtrees.
+ * - All three conditions must be true for the trees
+ *   to be identical.
+ *
+ * Time Complexity: O(N)
+ * - Every node is visited exactly once.
+ *
+ * Space Complexity: O(H)
+ * - H is the height of the tree (recursive stack).
+ * - Balanced Tree: O(log N)
+ * - Skewed Tree: O(N)
+ */
+
+class Solution {
+
+    // Function to check whether two trees are identical.
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+
+        // Base Case:
+        // If at least one node is null,
+        // stop recursion and compare them.
+        //
+        // Case 1: p = null, q = null  -> true
+        // Case 2: p = null, q = node  -> false
+        // Case 3: p = node, q = null  -> false
+        if (p == null || q == null)
+            return (p == q);
+
+        // Three conditions must be true:
+        //
+        // 1. Current node values should be equal.
+        // 2. Left subtrees should be identical.
+        // 3. Right subtrees should be identical.
+        return (p.val == q.val)
+                && isSameTree(p.left, q.left)
+                && isSameTree(p.right, q.right);
+    }
+}
