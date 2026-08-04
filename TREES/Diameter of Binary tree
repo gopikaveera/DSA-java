@@ -1,0 +1,135 @@
+/**
+ * Approach (Brute Force):
+ *
+ * 1. Visit every node using recursion.
+ * 2. Assume the current node is the turning (curve) point.
+ * 3. Find the height of its left subtree.
+ * 4. Find the height of its right subtree.
+ * 5. Diameter passing through the current node = Left Height + Right Height.
+ * 6. Update the maximum diameter.
+ * 7. Recursively repeat the same process for the left and right subtrees.
+ *
+ * Time Complexity: O(N²)
+ * - Every node calls the height function.
+ * - Height calculation takes O(N) in the worst case.
+ *
+ * Space Complexity: O(H)
+ * - Recursive call stack.
+ * - Balanced Tree: O(log N)
+ * - Skewed Tree: O(N)
+ */
+
+class Solution {
+
+    // Stores the maximum diameter found so far.
+    int diameter = 0;
+
+    // Main function
+    public int diameterOfBinaryTree(TreeNode root) {
+
+        // Visit every node in the tree.
+        findDiameter(root);
+
+        // Return the maximum diameter.
+        return diameter;
+    }
+
+    // Traverses every node.
+    public void findDiameter(TreeNode root) {
+
+        // Base Case
+        if (root == null)
+            return;
+
+        // Find the height of the left subtree.
+        int lh = findHeight(root.left);
+
+        // Find the height of the right subtree.
+        int rh = findHeight(root.right);
+
+        // Diameter passing through the CURRENT NODE
+        // = Left Height + Right Height.
+        diameter = Math.max(diameter, lh + rh);
+
+        // Recursively check the left subtree.
+        findDiameter(root.left);
+
+        // Recursively check the right subtree.
+        findDiameter(root.right);
+    }
+
+    // Helper function to calculate height.
+    public int findHeight(TreeNode root) {
+
+        // Empty tree has height 0.
+        if (root == null)
+            return 0;
+
+        // Calculate left subtree height.
+        int lh = findHeight(root.left);
+
+        // Calculate right subtree height.
+        int rh = findHeight(root.right);
+
+        // Return height of the current subtree.
+        return 1 + Math.max(lh, rh);
+    }
+}
+/**
+ * Approach (Optimal):
+ *
+ * - Use a single DFS traversal.
+ * - The helper function returns the height of each subtree.
+ * - At every node:
+ *      1. Calculate the left subtree height.
+ *      2. Calculate the right subtree height.
+ *      3. Diameter passing through the current node
+ *         = Left Height + Right Height.
+ *      4. Update the maximum diameter.
+ *      5. Return the height of the current subtree.
+ *
+ * Time Complexity: O(N)
+ * - Every node is visited exactly once.
+ *
+ * Space Complexity: O(H)
+ * - H = Height of the tree.
+ * - Balanced Tree: O(log N)
+ * - Skewed Tree: O(N)
+ */
+
+class Solution {
+
+    // Stores the maximum diameter found so far.
+    int diameter = 0;
+
+    // Main function.
+    public int diameterOfBinaryTree(TreeNode root) {
+
+        // Start DFS traversal.
+        findHeight(root);
+
+        // Return the maximum diameter.
+        return diameter;
+    }
+
+    // Helper function to calculate height.
+    public int findHeight(TreeNode root) {
+
+        // Base Case:
+        // Empty tree has height 0.
+        if (root == null)
+            return 0;
+
+        // Calculate the height of the left subtree.
+        int lh = findHeight(root.left);
+
+        // Calculate the height of the right subtree.
+        int rh = findHeight(root.right);
+
+        // Diameter passing through the CURRENT NODE.
+        diameter = Math.max(diameter, lh + rh);
+
+        // Return the height of the current subtree.
+        return 1 + Math.max(lh, rh);
+    }
+}
