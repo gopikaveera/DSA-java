@@ -1,0 +1,122 @@
+/**
+ * Approach:
+ * 1. Add the root node (if it is not a leaf).
+ * 2. Traverse the left boundary (excluding leaf nodes).
+ * 3. Traverse all leaf nodes (left to right).
+ * 4. Traverse the right boundary (excluding leaf nodes)
+ *    and add it in reverse order using a stack.
+ *
+ * Time Complexity: O(N)
+ * - Every node is visited at most once.
+ *
+ * Space Complexity: O(H)
+ * - H is the height of the tree.
+ * - Recursive stack for leaf traversal.
+ * - Extra stack for storing the right boundary.
+ */
+
+class Solution {
+
+    // Stores the final boundary traversal.
+    ArrayList<Integer> ans = new ArrayList<>();
+
+    public ArrayList<Integer> boundaryTraversal(Node root) {
+
+        // Base Case:
+        // If the tree is empty, return an empty list.
+        if (root == null)
+            return ans;
+
+        // Add the root only if it is not a leaf.
+        // If root itself is a leaf,
+        // it will be added in leaf traversal.
+        if (!isLeaf(root))
+            ans.add(root.data);
+
+        // Step 1: Add left boundary (excluding leaves).
+        leftBoundary(root.left);
+
+        // Step 2: Add all leaf nodes.
+        leafNode(root);
+
+        // Step 3: Add right boundary in reverse order.
+        rightBoundary(root.right);
+
+        return ans;
+    }
+
+    // Checks whether the current node is a leaf node.
+    public boolean isLeaf(Node root) {
+        return root.left == null && root.right == null;
+    }
+
+    // Adds the left boundary nodes.
+    // Leaf nodes are skipped because they
+    // will be added separately in leaf traversal.
+    public void leftBoundary(Node root) {
+
+        while (root != null) {
+
+            // Add only non-leaf nodes.
+            if (!isLeaf(root))
+                ans.add(root.data);
+
+            // Prefer moving to the left child.
+            if (root.left != null)
+                root = root.left;
+
+            // If left child doesn't exist,
+            // move to the right child.
+            else
+                root = root.right;
+        }
+    }
+
+    // Adds all leaf nodes using DFS.
+    public void leafNode(Node root) {
+
+        // Base Case
+        if (root == null)
+            return;
+
+        // If current node is a leaf,
+        // add it and return.
+        if (isLeaf(root)) {
+            ans.add(root.data);
+            return;
+        }
+
+        // Visit left subtree.
+        leafNode(root.left);
+
+        // Visit right subtree.
+        leafNode(root.right);
+    }
+
+    // Adds the right boundary in reverse order.
+    public void rightBoundary(Node root) {
+
+        // Stack is used to reverse the order.
+        Stack<Integer> st = new Stack<>();
+
+        while (root != null) {
+
+            // Ignore leaf nodes.
+            if (!isLeaf(root))
+                st.push(root.data);
+
+            // Prefer moving to the right child.
+            if (root.right != null)
+                root = root.right;
+
+            // If right child doesn't exist,
+            // move to the left child.
+            else
+                root = root.left;
+        }
+
+        // Pop elements to get reverse order.
+        while (!st.isEmpty())
+            ans.add(st.pop());
+    }
+}
