@@ -1,0 +1,114 @@
+/**
+ * Time Complexity: O(N)
+ * Space Complexity: O(N)
+ */
+
+class Solution {
+
+    // Stores the node and its position/index together.
+    class Pair {
+        TreeNode node;
+        long index;
+
+        Pair(TreeNode node, long index) {
+            this.node = node;      // Store the current node.
+            this.index = index;    // Store the position of the node.
+        }
+    }
+
+    public int widthOfBinaryTree(TreeNode root) {
+
+        if (root == null) return 0; // If tree is empty, width is 0.
+
+        Queue<Pair> q = new LinkedList<>(); // Queue is used for BFS.
+
+        q.offer(new Pair(root, 0)); // Put root in queue with index 0.
+
+        int maxWidth = 0; // Stores the maximum width found so far.
+
+        while (!q.isEmpty()) { // Continue until all levels are processed.
+
+            int size = q.size(); // Number of nodes in the current level.
+
+            long first = q.peek().index; // Index of the first node of this level.
+
+            long last = first; // Initially, last index is the first index.
+
+            for (int i = 0; i < size; i++) { // Process only the current level.
+
+                Pair curr = q.poll(); // Remove one node from the queue.
+
+                last = curr.index; // Update last index with the current node's index.
+
+                if (curr.node.left != null) // If left child exists,
+                    q.offer(new Pair(curr.node.left, 2 * curr.index)); // add it with left-child index.
+
+                if (curr.node.right != null) // If right child exists,
+                    q.offer(new Pair(curr.node.right, 2 * curr.index + 1)); // add it with right-child index.
+            }
+
+            int width = (int)(last - first + 1); // Calculate width including null gaps.
+
+            maxWidth = Math.max(maxWidth, width); // Keep the maximum width.
+        }
+
+        return maxWidth; // Return the maximum width.
+    }
+}
+
+/**
+ * Time Complexity: O(N)
+ * Space Complexity: O(H)
+ *
+ * H = height of the tree.
+ */
+
+class Solution {
+
+    // Stores the index of the first node encountered at each level.
+    List<Long> firstIndex = new ArrayList<>();
+
+    // Stores the maximum width found so far.
+    long maxWidth = 0;
+
+    public int widthOfBinaryTree(TreeNode root) {
+
+        dfs(root, 0, 0); // Start DFS with level = 0 and index = 0.
+
+        return (int) maxWidth; // Return the maximum width.
+    }
+
+    public void dfs(TreeNode root, int level, long index) {
+
+        if (root == null) return; // If node is null, stop recursion.
+
+        if (level == firstIndex.size()) // If this is the first node of this level,
+            firstIndex.add(index); // store its index as the starting position.
+
+        maxWidth = Math.max(
+            maxWidth,
+            index - firstIndex.get(level) + 1
+        ); // Calculate current width and update maximum width.
+
+        dfs(
+            root.left,
+            level + 1,
+            2 * index
+        ); // Go to left child: level increases and index becomes 2*index.
+
+        dfs(
+            root.right,
+            level + 1,
+            2 * index + 1
+        ); // Go to right child: level increases and index becomes 2*index+1.
+    }
+}
+BFS:
+Queue
+→ Process level by level
+→ Find first and last index of current level
+
+DFS:
+Recursion
+→ Store first index of every level
+→ Compare current index with first index
