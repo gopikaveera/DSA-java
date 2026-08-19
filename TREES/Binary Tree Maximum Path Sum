@@ -1,0 +1,41 @@
+/**
+ * Approach:
+ * - Use Depth-First Search (DFS) to calculate the maximum path sum.
+ * - Recursively find the maximum contribution from the left and right subtrees.
+ * - Ignore negative path sums using Math.max(0, ...).
+ * - Update the global maximum using both left and right paths through the current node.
+ * - Return only the larger of the left and right paths to the parent.
+ *
+ * Time Complexity: O(N)
+ * Space Complexity: O(H)
+ */
+
+class Solution {
+
+    int maxsum = Integer.MIN_VALUE; // Stores the maximum path sum found so far.
+
+    public int maxPathSum(TreeNode root) {
+
+        dfs(root); // Perform DFS and calculate the maximum path sum.
+
+        return maxsum; // Return the maximum path sum.
+    }
+
+    public int dfs(TreeNode root) {
+
+        if (root == null) return 0; // If the node is null, return 0.
+
+        int l = Math.max(0, dfs(root.left));
+        // Find the maximum left path sum and ignore it if it is negative.
+
+        int r = Math.max(0, dfs(root.right));
+        // Find the maximum right path sum and ignore it if it is negative.
+
+        maxsum = Math.max(maxsum, l + r + root.val);
+        // Calculate the path through the current node using both left and right sides.
+        // Update maxsum if this path is greater.
+
+        return root.val + Math.max(l, r);
+        // Return only the larger side to the parent because the path can continue through only one branch.
+    }
+}
