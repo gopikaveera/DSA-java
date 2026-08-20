@@ -1,0 +1,79 @@
+/**
+ * Approach:
+ * - Use DFS to store each node along with its column, level, and value.
+ * - Store each node as [column, level, value] in a list.
+ * - Sort the list first by column, then by level, and finally by value.
+ * - Traverse the sorted list and group nodes belonging to the same column.
+ * - Add each node's value to the corresponding column list.
+ *
+ * Time Complexity: O(N log N)
+ * Space Complexity: O(N)
+ */
+
+class Solution {
+
+    List<int[]> list = new ArrayList<>();
+    // Stores each node as [column, level, value].
+
+    public List<List<Integer>> verticalTraversal(TreeNode root) {
+
+        dfs(root, 0, 0);
+        // Perform DFS starting from column 0 and level 0.
+
+        Collections.sort(list, (a, b) -> {
+
+            if (a[0] != b[0])
+                return a[0] - b[0];
+            // If columns are different, sort by column.
+
+            if (a[1] != b[1])
+                return a[1] - b[1];
+            // If columns are same, sort by level.
+
+            return a[2] - b[2];
+            // If column and level are same, sort by node value.
+        });
+
+        List<List<Integer>> ans = new ArrayList<>();
+        // Stores the final vertical traversal result.
+
+        int prevcol = Integer.MIN_VALUE;
+        // Stores the previous column that was processed.
+
+        for (int i = 0; i < list.size(); i++) {
+
+            int[] node = list.get(i);
+            // Get the current node's [column, level, value].
+
+            if (node[0] != prevcol) {
+
+                ans.add(new ArrayList<>());
+                // If we encounter a new column, create a new list.
+
+                prevcol = node[0];
+                // Update the previous column.
+            }
+
+            ans.get(ans.size() - 1).add(node[2]);
+            // Get the current column's list and add the node's value.
+        }
+
+        return ans;
+        // Return the vertical traversal result.
+    }
+
+    public void dfs(TreeNode root, int level, int col) {
+
+        if (root == null) return;
+        // Stop recursion when the node is null.
+
+        list.add(new int[]{col, level, root.val});
+        // Store the current node as [column, level, value].
+
+        dfs(root.left, level + 1, col - 1);
+        // Move left: increase level and decrease column.
+
+        dfs(root.right, level + 1, col + 1);
+        // Move right: increase level and increase column.
+    }
+}
